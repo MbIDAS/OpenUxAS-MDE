@@ -1,0 +1,112 @@
+task LineSearchTask {
+    series: CMASI
+    pointList: pointList { series: CMASI
+        points: [
+		    point { altitude: 0 longitude: -121.0083254511704 latitude: 45.31010191362929 }
+		    point { altitude: 0 longitude: -121.0073363873731 latitude: 45.31014454653914 }
+		    point { altitude: 0 longitude: -121.0061471140418 latitude: 45.30993640240653 }
+		    point { altitude: 0 longitude: -121.0049588506904 latitude: 45.30953092852143 }
+		    point { altitude: 0 longitude: -121.0038459859541 latitude: 45.30916015439587 }
+		    point { altitude: 0 longitude: -121.0030050826207 latitude: 45.30879072986265 }
+		    point { altitude: 0 longitude: -121.0020852486466 latitude: 45.30829299220483 }
+		    point { altitude: 0 longitude: -121.0012336094293 latitude: 45.30769444060208 }
+		    point { altitude: 0 longitude: -121.0000337568532 latitude: 45.30720319853433 }
+		    point { altitude: 0 longitude: -120.9981743127899 latitude: 45.30657536722347 }
+		    point { altitude: 0 longitude: -120.9956610197904 latitude: 45.30671401714053 }
+		    point { altitude: 0 longitude: -120.9935292154597 latitude: 45.307334481688 }
+		    point { altitude: 0 longitude: -120.991376180592 latitude: 45.30866407687476 }
+		    point { altitude: 0 longitude: -120.9900795118393 latitude: 45.31006033945595 }
+		    point { altitude: 0 longitude: -120.9887445897925 latitude: 45.31253260623115 }
+		    point { altitude: 0 longitude: -120.9883094326812 latitude: 45.31367220635453 }
+		    point { altitude: 0 longitude: -120.987849110606 latitude: 45.31425929513004 }
+		    point { altitude: 0 longitude: -120.9875228385498 latitude: 45.31534456334312 }
+		    point { altitude: 0 longitude: -120.9865032597271 latitude: 45.31782771140955 }
+		    point { altitude: 0 longitude: -120.9859171557376 latitude: 45.31916503834662 }
+		    point { altitude: 0 longitude: -120.9852662838611 latitude: 45.32013049182169 }
+		    point { altitude: 0 longitude: -120.9842303874313 latitude: 45.32101828295757 }
+		    point { altitude: 0 longitude: -120.9829050661829 latitude: 45.32181573161098 }
+		    point { altitude: 0 longitude: -120.9812658515318 latitude: 45.32250107834006 }
+		    point { altitude: 0 longitude: -120.9801032216358 latitude: 45.3226866441459 }
+		    point { altitude: 0 longitude: -120.9790232250835 latitude: 45.32237564217537 }
+		    point { altitude: 0 longitude: -120.977160254635 latitude: 45.32170931738131 }
+		    point { altitude: 0 longitude: -120.9759675889779 latitude: 45.32125315824487 }
+		    point { altitude: 0 longitude: -120.9741972283461 latitude: 45.32081268964843 }
+		    point { altitude: 0 longitude: -120.9731926005219 latitude: 45.32029146766373 }
+		    point { altitude: 0 longitude: -120.9725689266584 latitude: 45.31969137638066 }
+		    point { altitude: 0 longitude: -120.9725040886852 latitude: 45.31898425547526 }
+		    point { altitude: 0 longitude: -120.9727630711143 latitude: 45.3183602913433 }
+		    point { altitude: 0 longitude: -120.9732193850189 latitude: 45.31786773297657 }
+		    point { altitude: 0 longitude: -120.9736261001584 latitude: 45.31700059021674 }
+		    point { altitude: 0 longitude: -120.9736074738958 latitude: 45.31605495781051 }
+		    point { altitude: 0 longitude: -120.9741065277381 latitude: 45.31491499885933 }
+		    point { altitude: 0 longitude: -120.9743129107407 latitude: 45.31392596539244 }
+		    point { altitude: 0 longitude: -120.9740908342498 latitude: 45.31232997231063 }
+		    point { altitude: 0 longitude: -120.973681895543 latitude: 45.311368002835 }
+		    point { altitude: 0 longitude: -120.9731209607734 latitude: 45.31017345824397 }
+		    point { altitude: 0 longitude: -120.9722957805609 latitude: 45.3089657186319 }
+		    point { altitude: 0 longitude: -120.9711703669836 latitude: 45.30801518804441 }
+		    point { altitude: 0 longitude: -120.9693028949764 latitude: 45.3072796886579 }
+		    point { altitude: 0 longitude: -120.9668078517994 latitude: 45.30673202190997 }
+		    point { altitude: 0 longitude: -120.963040952013 latitude: 45.30673135789861 }
+		    point { altitude: 0 longitude: -120.9603937362464 latitude: 45.30744129783566 }
+		    point { altitude: 0 longitude: -120.9585312665129 latitude: 45.30846818080652 }
+		    point { altitude: 0 longitude: -120.9568029305637 latitude: 45.30967931489138 }
+		    point { altitude: 0 longitude: -120.9561914219863 latitude: 45.3112882257958 }
+		    point { altitude: 0 longitude: -120.955811614785 latitude: 45.31284763186452 }
+		    point { altitude: 0 longitude: -120.9557665391128 latitude: 45.3139974188727 }
+		    point { altitude: 0 longitude: -120.9549900754267 latitude: 45.31512567936078 }
+		    point { altitude: 0 longitude: -120.9543252975696 latitude: 45.31632220351368 }
+		    point { altitude: 0 longitude: -120.9535581498927 latitude: 45.31750916938326 }
+		    point { altitude: 0 longitude: -120.9528060444161 latitude: 45.31824498443208 }
+		    point { altitude: 0 longitude: -120.9517271997578 latitude: 45.31909106182526 }
+		    point { altitude: 0 longitude: -120.9497937414778 latitude: 45.32063177367963 }
+		    point { altitude: 0 longitude: -120.9485991407506 latitude: 45.32186043789297 }
+		    point { altitude: 0 longitude: -120.9473757232273 latitude: 45.32314095506244 }
+		    point { altitude: 0 longitude: -120.9462492191656 latitude: 45.32454104239167 }
+		    point { altitude: 0 longitude: -120.9458725497733 latitude: 45.3254667239222 }
+		    point { altitude: 0 longitude: -120.9457325141464 latitude: 45.32774671938083 }
+		    point { altitude: 0 longitude: -120.946057246728 latitude: 45.32982728617336 }
+		    point { altitude: 0 longitude: -120.9463435048966 latitude: 45.33114059711549 }
+		    point { altitude: 0 longitude: -120.9472305766867 latitude: 45.33168008145889 }
+		    point { altitude: 0 longitude: -120.9496655093177 latitude: 45.33231336400754 }
+		    point { altitude: 0 longitude: -120.9537037613241 latitude: 45.33339203601861 }
+		    point { altitude: 0 longitude: -120.9549742185475 latitude: 45.33427824672614 }
+		    point { altitude: 0 longitude: -120.9552160063732 latitude: 45.33547030993997 }
+		    point { altitude: 0 longitude: -120.9544566767464 latitude: 45.33651686117801 }
+		    point { altitude: 0 longitude: -120.9536103477864 latitude: 45.33731583461009 }
+		    point { altitude: 0 longitude: -120.9525906588105 latitude: 45.33765558656223 }
+		    point { altitude: 0 longitude: -120.9508791521434 latitude: 45.33776203305463 }
+		    point { altitude: 0 longitude: -120.9493079260548 latitude: 45.33762679549746 }
+		    point { altitude: 0 longitude: -120.9470451217051 latitude: 45.33708197013563 }
+		    point { altitude: 0 longitude: -120.9446898991854 latitude: 45.33565212099104 }
+		    point { altitude: 0 longitude: -120.9431223210462 latitude: 45.33481996751565 }
+		    point { altitude: 0 longitude: -120.9407323965408 latitude: 45.33360296972642 }
+		    point { altitude: 0 longitude: -120.9369468851942 latitude: 45.33125989249351 }
+		    point { altitude: 0 longitude: -120.9364498493791 latitude: 45.33087842334099 }
+		    point { altitude: 0 longitude: -120.9352324790402 latitude: 45.33102689836534 }
+		    point { altitude: 0 longitude: -120.9334351896656 latitude: 45.33157197498465 }
+		    point { altitude: 0 longitude: -120.9324468623195 latitude: 45.33258769668668 }
+		    point { altitude: 0 longitude: -120.9321481980392 latitude: 45.33437066167288 }
+		    point { altitude: 0 longitude: -120.932334755014 latitude: 45.33542628105072 }
+		    point { altitude: 0 longitude: -120.9324001273692 latitude: 45.33681711137329 }
+		    point { altitude: 0 longitude: -120.9332043644707 latitude: 45.33823373721766 }
+		    point { altitude: 0 longitude: -120.9352862310112 latitude: 45.33968836356476 }
+		    point { altitude: 0 longitude: -120.9377622731235 latitude: 45.34120895091226 }
+        ]
+    }
+    useInertialViewAngles: false
+    label: "Line_Waterway_Deschutes"
+    viewAngles: [
+        wedge series=CMASI {
+            asimuthCenterLine: 35.0
+            verticalCenterLine: -60.0
+        }
+    ]
+    revisitRate: 0
+    required: True
+    desiredWavelengthBands: [
+        waveLengthBand AllAny {}
+    ]
+    dwellTime: 0
+    groundSampleDistance: 1000
+}

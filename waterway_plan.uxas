@@ -1,0 +1,11 @@
+
+planItem {
+    startDelay_ms: 2000
+    label: PISR_FromGoogleEarth
+    task {
+        include "line_search_task.uxas"
+        taskID: 1000
+    }
+    entities: [ 400, 500 ]
+}
+

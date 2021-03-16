@@ -30,6 +30,18 @@ service PlanBuilderService {
 service SensorManagerService {
 }
 
+service WaypointPlanManager {
+    VehicleID: "*"
+    NumberWaypointsToServe: 15
+    NumberWaypointsOverlap: 5
+    DefaultLoiterRadius_m: 250
+    param.turnType: FlyOver
+    AddLoiterToEndOfSegments: False
+    AddLoiterToEndOfMission: False
+    LoopBackToFirstTask: False
+    GimbalPayloadId=1
+}
+
 service MessageLoggerDataService {
     LogFileMessageCountLimit: 1000
     FilesPerSubDirectory: 1000

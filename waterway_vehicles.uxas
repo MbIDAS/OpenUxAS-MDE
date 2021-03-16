@@ -1,0 +1,10 @@
+
+vehicle {
+    include UAV1 @ "standard_vehicles.uxas"
+    ID: 400
+}
+
+vehicle {
+    include UAV1 @ "standard_vehicles.uxas"
+    ID: 500
+}

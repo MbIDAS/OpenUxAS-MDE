@@ -5,10 +5,10 @@ uxas {
     entityType: Aircraft
 
     networks: [
-        include: "bridge_amase_standard.uxas"
+        include "bridge_amase_standard.uxas"
     ]
 
     services: [
-        include: "services_standard.uxas"
+        include "services_standard.uxas"
     ]
 }

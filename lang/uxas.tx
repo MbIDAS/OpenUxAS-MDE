@@ -7,7 +7,7 @@ Field:
     ;
 
 FieldValue:
-    value=StructValue | value=IncludeFile | value=OverrideStruct | value=RemoveStruct | value=NUMBER | value=ID | value=STRING |  value=ArrayValue
+    value=StructValue | value=Include | value=OverrideStruct | value=RemoveStruct | value=NUMBER | value=ID | value=STRING |  value=ArrayValue
     ;
 
 ArrayValue:
@@ -20,8 +20,12 @@ StructValue:
     '}'
     ;
 
-IncludeFile:
-    "include" filename=STRING
+Include:
+    "include" include_ref?=IncludeRef filename=STRING
+    ;
+
+IncludeRef:
+    itemRef=ID '@'
     ;
 
 OverrideStruct:
