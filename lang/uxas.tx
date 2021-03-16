@@ -1,0 +1,35 @@
+UxASConfig:
+    config*=StructValue
+    ;
+
+Field:
+    tag=ID ':' FieldValue
+    ;
+
+FieldValue:
+    value=StructValue | value=IncludeFile | value=OverrideStruct | value=RemoveStruct | value=NUMBER | value=ID | value=STRING |  value=ArrayValue
+    ;
+
+ArrayValue:
+    '[' values*=FieldValue ']'
+    ;
+
+StructValue:
+    struct_type=ID type?=ID '{'
+        fields*=Field
+    '}'
+    ;
+
+IncludeFile:
+    "include" filename=STRING
+    ;
+
+OverrideStruct:
+    "override" type=ID '{'
+        fields*=Field
+    '}'
+    ;
+
+RemoveStruct:
+    "remove" type=ID
+    ;

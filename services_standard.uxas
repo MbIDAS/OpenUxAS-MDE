@@ -1,0 +1,45 @@
+service TaskManagerService {
+}
+
+service AutomationRequestValidatorService {
+}
+
+service RoutePlannerVisibilityService {
+    TurnRadiusOffset_m: 0.0
+    MinimumWaypointSeparation_m: 50.0
+}
+
+service RouteAggregatorService {
+}
+
+service AssignmentTreeBranchBoundService {
+    NumberNodesMaximum: 0
+    CostFunction: MINMAX
+}
+
+service AutomationDiagramDataService {
+}
+
+service Test_SimulationTime {
+}
+
+service PlanBuilderService {
+    AssignmentStartPointLead_m: 0.0
+}
+
+service SensorManagerService {
+}
+
+service MessageLoggerDataService {
+    LogFileMessageCountLimit: 1000
+    FilesPerSubDirectory: 1000
+    LogMessages: [
+        LogMessage uxas {
+            NumberMessagesToSkip: 0
+        }
+        LogMessage afrl {
+            NumberMessagesToSkip: 0
+        }
+   ]
+}
+

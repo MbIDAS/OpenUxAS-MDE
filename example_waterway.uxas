@@ -1,0 +1,14 @@
+
+
+uxas {
+    entityId: 100
+    entityType: Aircraft
+
+    networks: [
+        include: "bridge_amase_standard.uxas"
+    ]
+
+    services: [
+        include: "services_standard.uxas"
+    ]
+}
