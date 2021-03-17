@@ -104,9 +104,7 @@ task LineSearchTask {
     ]
     revisitRate: 0
     required: True
-    desiredWavelengthBands: [
-        waveLengthBand AllAny {}
-    ]
+    desiredWavelengthBands: [ "AllAny " ]
     dwellTime: 0
     groundSampleDistance: 1000
 }
