@@ -49,7 +49,7 @@ vehicle UAV1 {
     minAltAboveGround 0
 }
 
-vehicle_initial_state UAV1 {
+vehicle_initial_state UAV1_state {
     location: location3d {
         altitude: 700
         altitudeType: MSL

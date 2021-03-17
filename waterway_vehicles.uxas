@@ -4,7 +4,17 @@ vehicle {
     ID: 400
 }
 
+vehicle_initial_state {
+    include UAV1_state @ "standard_vehicles.uxas"
+    ID: 400
+}
+
 vehicle {
     include UAV1 @ "standard_vehicles.uxas"
+    ID: 500
+}
+
+vehicle_initial_state {
+    include UAV1_state @ "standard_vehicles.uxas"
     ID: 500
 }

@@ -4,10 +4,13 @@ UxASConfig:
 
 Field:
     tag=ID ':' FieldValue
+    | include=Include
+    | override=OverrideStruct
+    | remove=RemoveStruct
     ;
 
 FieldValue:
-    value=StructValue | value=Include | value=OverrideStruct | value=RemoveStruct | value=NUMBER | value=ID | value=STRING |  value=ArrayValue
+    value=StructValue | value=NUMBER | value=ID | value=STRING |  value=ArrayValue
     ;
 
 ArrayValue:

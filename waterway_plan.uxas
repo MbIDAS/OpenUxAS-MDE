@@ -6,6 +6,6 @@ planItem {
         include "line_search_task.uxas"
         taskID: 1000
     }
-    entities: [ 400, 500 ]
+    entities: [ 400 500 ]
 }
 
