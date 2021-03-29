@@ -1,14 +1,15 @@
 
 
 uxas {
-    entityId: 100
-    entityType: Aircraft
+    FormatVersion: "1.0"
+    EntityID: 100
+    EntityType: Aircraft
 
     networks: [
         include "bridge_amase_standard.uxas"
     ]
 
     services: [
-        include "services_standard.uxas"
+        include "standard_services.uxas"
     ]
 }

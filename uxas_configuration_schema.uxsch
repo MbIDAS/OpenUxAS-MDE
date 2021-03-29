@@ -1,0 +1,18 @@
+
+uxas {
+    xml {
+        tag: "UxAS"
+        attr FormatVersion: FormatVersion
+        attr EntityID: EntityID
+        attr EntityType: EntityType
+
+        children networks {
+            render: _
+        }
+
+        children services {
+            render: _
+        }
+    }
+}
+

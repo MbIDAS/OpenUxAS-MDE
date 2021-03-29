@@ -1,60 +1,60 @@
 vehicle UAV1 {
-    minimumSpeed: 18.0055561065674
-    maximumSpeed: 33.4388885498047
-    nominalSpeed: 22.0
-    nominalAltitude: 700.0
-    nominalAltitudeType: MSL
-    nominalFlightProfile: flightProfile {
-        airspeed: 22.1211109161377
-        pitchAngle: 0
-        verticalSpeed: 0
-        maxBankAngle: 20
-        energyRate: 0.000277999992249534
+    MinimumSpeed: 18.0055561065674
+    MaximumSpeed: 33.4388885498047
+    NominalSpeed: 22.0
+    NominalAltitude: 700.0
+    NominalAltitudeType: MSL
+    NominalFlightProfile: flightProfile {
+        Airspeed: 22.1211109161377
+        PitchAngle: 0
+        VerticalSpeed: 0
+        MaxBankAngle: 20
+        EnergyRate: 0.000277999992249534
     }
-    payloadConfigurations: [
-        gimbalConfiguration {
-            series: CMASI
-            minAzimuth: -180.0
-            maxAzimuth: 180.0
-            isAzimuthClamped: true
-            minElevation: -130.0
-            maxElevation: 40.0
-            isElevationClamped: true
-            minRotation: 0.0
-            maxRotation: 0.0
-            isRotationClamped: true
-            maxAzimuthSlewRate: 114.59
-            maxElevationSlewRate: 114.59
-            maxRotationRate: 0.0
-            containedPayloads: [ 10001 ]
-            payloadID: 1
+    PayloadConfigurationList: [
+        GimbalConfiguration {
+            Series: CMASI
+            MinAzimuth: -180.0
+            MaxAzimuth: 180.0
+            IsAzimuthClamped: true
+            MinElevation: -130.0
+            MaxElevation: 40.0
+            IsElevationClamped: true
+            MinRotation: 0.0
+            MaxRotation: 0.0
+            IsRotationClamped: true
+            MaxAzimuthSlewRate: 114.59
+            MaxElevationSlewRate: 114.59
+            MaxRotationRate: 0.0
+            ContainedPayloads: [ 10001 ]
+            PayloadID: 1
         }
-        cameraConfiguration: {
-            series: CMASI
-            supportedWavelengthBands: [ "AllAny" ]
-            fieldOfViewMode: Discrete
-            minHorizontalFieldOfView: 0.11
-            maxHorizontalFieldOfView: 45.0
-            discreteHorizontalFieldOfViewList: [
+        CameraConfiguration: {
+            Series: CMASI
+            SupportedWavelengthBands: [ "AllAny" ]
+            FieldOfViewMode: Discrete
+            MinHorizontalFieldOfView: 0.11
+            MaxHorizontalFieldOfView: 45.0
+            DiscreteHorizontalFieldOfViewList: [
                 45.0 22.0 7.6 3.7 0.63 0.11 ]
-            videoStreamHorizontalResolution: 1024
-            videoStreamVerticalResolution: 768
-            payloadID: 10001
+            VideoStreamHorizontalResolution: 1024
+            VideoStreamVerticalResolution: 768
+            PayloadID: 10001
         }
     }
-    availableLoiterTypes: ["Circular"]
-    availableTurnTypes: [ "TurnShort" "FlyOver" ]
-    minimumAltitude: 0
-    maximumAltiture: 1000000
-    minAltAboveGround 0
+    AvailableLoiterTypes: ["Circular"]
+    AvailableTurnTypes: [ "TurnShort" "FlyOver" ]
+    MinimumAltitude: 0
+    MaximumAltiture: 1000000
+    MinAltAboveGround 0
 }
 
-vehicle_initial_state UAV1_state {
-    location: location3d {
-        altitude: 700
-        altitudeType: MSL
-        latitude: 45.3171
-        longitude: -120.9923
+Vehicle_initial_state UAV1_state {
+    Location: location3d {
+        Altitude: 700
+        AltitudeType: MSL
+        Latitude: 45.3171
+        Longitude: -120.9923
     }
     u: 0
     v: 0
@@ -62,37 +62,37 @@ vehicle_initial_state UAV1_state {
     udot: 0
     vdot: 0
     wdot: 0
-    heading: 90
-    pitch: 0
-    roll: 0
+    Heading: 90
+    Pitch: 0
+    Roll: 0
     p: 0
     q: 0
     r: 0
-    airspeed: 22.1211109161377
-    verticalSpeed: 0
-    actualEnergyRate: 0
-    energyAvailable: 100
-    windspeed: 0
+    Airspeed: 22.1211109161377
+    VerticalSpeed: 0
+    ActualEnergyRate: 0
+    EnergyAvailable: 100
+    WindSpeed: 0
     windDirection: 0
-    groundSpeed: 0
-    groundTrack: 0
-    payloadStates: [
-        gimbalState {
-            series: CMASI
-            pointingMode: AirVehicleRelativeAngle
-            azimuth: 0.0
-            elevation: -45.0
-            rotation: 0.0
-            payloadID: 1
+    GroundSpeed: 0
+    GroundTrack: 0
+    PayloadStateList: [
+        GimbalState {
+            Series: CMASI
+            PointingMode: AirVehicleRelativeAngle
+            Azimuth: 0.0
+            Elevation: -45.0
+            Rotation: 0.0
+            PayloadID: 1
         }
-        cameraState {
-            series: CMASI
-            horizontalFieldOfView: 45.0
-            payloadID: 10001
+        CameraState {
+            Series: CMASI
+            HorizontalFieldOfView: 45.0
+            PayloadID: 10001
         }
     ]
-    currentWaypoint: 0
-    currentCommand: 0
-    mode: Waypoint
-    time: 0
+    CurrentWaypoint: 0
+    CurrentCommand: 0
+    Mode: Waypoint
+    Time: 0
 }

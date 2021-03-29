@@ -1,0 +1,125 @@
+
+service StatusReportService {
+    xml {
+        tag: "StatusReportService"
+        attr VehicleID: VehicleId
+    }
+}
+
+service Test_SimulationTime {
+    xml {
+        tag: "Test_SimulationTime"
+    }
+}
+
+service TaskManagerService {
+    xml {
+        tag: "TaskManagerService"
+    }
+}
+
+service SensorManagerService {
+    xml {
+        tag: "SensorManagerService"
+    }
+}
+
+service AutomationRequestValidatorService {
+    xml {
+        tag: "AutomationRequestValidatorService"
+    }
+}
+
+service RoutePlannerVisibilityService {
+    xml {
+        tag: "RoutePlannerVisibilityService"
+        attr TurnRadiusOffset_m: TurnRadiusOffset_m
+        attr MinimumWaypointSeparation_m: MinimumWaypointSeparation_m
+    }
+}
+
+service PlanBuilderService {
+    xml {
+        tag: "PlanBuilderService"
+        attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
+    }
+}
+
+service SendMessagesService {
+    xml {
+        tag: "SendMessagesService"
+        attr PathToMessageFiles: PathToMessageFiles
+        children messages {
+            tag: "Message"
+            attr MessageFileName: MessageFileName
+            attr SendTime_ms: SendTime_ms
+        }
+    }
+}
+
+service RouteAggregatorService {
+    xml {
+        tag: "RouteAggregatorService"
+    }
+}
+
+service AssignmentTreeBranchBoundService {
+    xml {
+        tag: "AssignmentTreeBranchBoundService"
+        attr NumberNodesMaximum: NumberNodesMaximum
+        attr CostFunction: CostFunction
+    }
+}
+
+service AutomationDiagramDataService {
+    xml {
+        tag: "AutomationDiagramDataService"
+    }
+}
+
+service WaypointPlanManagerService {
+    xml {
+        tag: "WaypointPlanManagerService"
+        attr VehicleID: VehicleID
+        attr NumberWaypointsToServe: NumberWaypointsToServe
+        attr NumberWaypointsOverlap: NumberWaypointsOverlap
+        attr DefaultLoiterRadius_m: DefaultLoiterRadius_m
+        attr "param.turnType": ParamTurnType
+        attr AddLoiterToEndOfSegments: AddLoiterToEndOfSegments
+        attr AddLoiterToEndOfMission: AddLoiterToEndOfMission
+        attr LoopBackToFirstTask: LoopBackToFirstTask
+        attr GimbalPayloadId: GimbalPayloadId
+    }
+}
+
+service PlanBuilderService {
+    xml {
+        tag: "PlanBuilderService"
+        attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
+    }
+}
+
+service SendMessagesService {
+    xml {
+        tag: "SendMessagesService"
+        attr PathToMessageFiles: PathToMessageFiles
+        children messages {
+            tag: "Message"
+            attr MessageFileName: MessageFileName
+            attr SendTime_ms: SendTime_ms
+        }
+    }
+}
+
+service MessageLoggerDataService {
+    xml {
+        tag: "MessageLoggerDataService"
+        attr LogFileMessageCountLimit: LogFileMessageCountLimit
+        attr FilesPerSubDirectory: FilesPerSubDirectory
+        children LogMessages {
+            tag: "LogMessage"
+            attr MessageType: type
+            attr NumberMessagesToSkip: NumberMessagesToSkip
+        }
+    }
+}

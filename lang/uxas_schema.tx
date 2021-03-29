@@ -1,0 +1,62 @@
+UxAS_Schema:
+    schemas *= SchemaDef
+    ;
+
+SchemaDef:
+    struct_type=ID type=ID? '{'
+        xml=XMLDef?
+    '}'
+    ;
+
+XMLDef:
+    "xml" "{"
+        fields *= Field
+    "}"
+    ;
+
+Field:
+    field=TagField |
+    field=AttrField |
+    field=ChildrenField |
+    field=ValueField |
+    field=RenderField
+    ;
+
+TagField:
+    "tag" ":" tag_value=ValueSpec
+    ;
+
+AttrField:
+    "attr" attr_type=STRING ":" attr_value=ValueSpec |
+    "attr" attr_type=ID ":" attr_value=ValueSpec
+    ;
+
+ChildrenField:
+    "children" children_source=ID "{"
+        children*=Field
+    "}"
+    ;
+
+ValueField:
+    "value" ":" value=ValueSpec
+    ;
+
+RenderField:
+    "render" ":" value=ValueSpec
+    ;
+
+ValueSpec:
+    value=CurrentValue | value=StringValue | value=NamedValue
+    ;
+
+StringValue:
+    string_value=STRING
+    ;
+
+NamedValue:
+    name=ID
+    ;
+
+CurrentValue:
+    "_"
+    ;
