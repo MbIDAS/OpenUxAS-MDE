@@ -30,11 +30,11 @@ StructValue:
     ;
 
 Include:
-    "include" include_ref?=IncludeRef filename=STRING
+    "include" include_ref=IncludeRef? filename=STRING
     ;
 
 IncludeRef:
-    itemRef=ID '@'
+    item_ref=ID '@'
     ;
 
 OverrideStruct:

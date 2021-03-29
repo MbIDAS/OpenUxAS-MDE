@@ -25,15 +25,24 @@ class UxasParser:
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
             struct_value = {"type": node.type, "struct_type": node.struct_type}
             for field in node.fields:
-                if field.fieldValue is None:
-                    print("Field "+field.tag+" is None")
-                struct_value[field.tag] = self.simplify_ast(field.fieldValue.value)
+                if field.fieldValue is not None:
+                    struct_value[field.tag] = self.simplify_ast(field.fieldValue.value)
+                elif field.include is not None:
+                    simplified = self.simplify_ast(field.include)
+                    for simp in simplified:
+                        for k, v in simp.items():
+                            struct_value[k] = v
+
             return struct_value
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["Include"]):
             cfgs = []
             included_cfg = uxas_meta.model_from_file(node.filename)
             for cfg in included_cfg.config:
-                cfgs.append(self.simplify_ast(cfg))
+                if node.include_ref:
+                    if cfg.type == node.include_ref.item_ref:
+                        cfgs.append(self.simplify_ast(cfg))
+                else:
+                    cfgs.append(self.simplify_ast(cfg))
             return cfgs
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["ArrayValue"]):
             vals = []

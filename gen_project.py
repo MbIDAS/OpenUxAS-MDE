@@ -5,7 +5,9 @@ import xml.etree.ElementTree as ET
 
 uxas_parser = UxasParser()
 uxas_parser.load_config_from_file("/extra/midas/openuxas-mde/example_waterway.uxas")
-uxas_parser.load_config_from_file("/extra/midas/openuxas-mde/waterway_vehicles.uxas")
+
+uxas_vehicle_parser = UxasParser()
+uxas_vehicle_parser.load_config_from_file("/extra/midas/openuxas-mde/waterway_vehicles.uxas")
 
 uxas_schema_parser = UxasSchemaParser()
 uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/network_schema.uxsch")

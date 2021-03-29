@@ -29,7 +29,7 @@ vehicle UAV1 {
             ContainedPayloads: [ 10001 ]
             PayloadID: 1
         }
-        CameraConfiguration: {
+        CameraConfiguration {
             Series: CMASI
             SupportedWavelengthBands: [ "AllAny" ]
             FieldOfViewMode: Discrete
@@ -41,12 +41,12 @@ vehicle UAV1 {
             VideoStreamVerticalResolution: 768
             PayloadID: 10001
         }
-    }
+    ]
     AvailableLoiterTypes: ["Circular"]
     AvailableTurnTypes: [ "TurnShort" "FlyOver" ]
     MinimumAltitude: 0
     MaximumAltiture: 1000000
-    MinAltAboveGround 0
+    MinAltAboveGround: 0
 }
 
 Vehicle_initial_state UAV1_state {
