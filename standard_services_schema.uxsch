@@ -1,38 +1,44 @@
 
 service StatusReportService {
     xml {
-        tag: "StatusReportService"
+        tag: "Service"
+        attr Type: "StatusReportService"
         attr VehicleID: VehicleId
     }
 }
 
 service Test_SimulationTime {
     xml {
-        tag: "Test_SimulationTime"
+        tag: "Service"
+        attr Type: "Test_SimulationTime"
     }
 }
 
 service TaskManagerService {
     xml {
-        tag: "TaskManagerService"
+        tag: "Service"
+        attr Type: "TaskManagerService"
     }
 }
 
 service SensorManagerService {
     xml {
-        tag: "SensorManagerService"
+        tag: "Service"
+        attr Type: "SensorManagerService"
     }
 }
 
 service AutomationRequestValidatorService {
     xml {
-        tag: "AutomationRequestValidatorService"
+        tag: "Service"
+        attr Type: "AutomationRequestValidatorService"
     }
 }
 
 service RoutePlannerVisibilityService {
     xml {
-        tag: "RoutePlannerVisibilityService"
+        tag: "Service"
+        attr Type: "RoutePlannerVisibilityService"
         attr TurnRadiusOffset_m: TurnRadiusOffset_m
         attr MinimumWaypointSeparation_m: MinimumWaypointSeparation_m
     }
@@ -40,14 +46,16 @@ service RoutePlannerVisibilityService {
 
 service PlanBuilderService {
     xml {
-        tag: "PlanBuilderService"
+        tag: "Service"
+        attr Type: "PlanBuilderService"
         attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
     }
 }
 
 service SendMessagesService {
     xml {
-        tag: "SendMessagesService"
+        tag: "Service"
+        attr Type: "SendMessagesService"
         attr PathToMessageFiles: PathToMessageFiles
         children messages {
             tag: "Message"
@@ -59,13 +67,15 @@ service SendMessagesService {
 
 service RouteAggregatorService {
     xml {
-        tag: "RouteAggregatorService"
+        tag: "Service"
+        attr Type: "RouteAggregatorService"
     }
 }
 
 service AssignmentTreeBranchBoundService {
     xml {
-        tag: "AssignmentTreeBranchBoundService"
+        tag: "Service"
+        attr Type: "AssignmentTreeBranchBoundService"
         attr NumberNodesMaximum: NumberNodesMaximum
         attr CostFunction: CostFunction
     }
@@ -73,35 +83,41 @@ service AssignmentTreeBranchBoundService {
 
 service AutomationDiagramDataService {
     xml {
-        tag: "AutomationDiagramDataService"
+        tag: "Service"
+        attr Type: "AutomationDiagramDataService"
     }
 }
 
 service WaypointPlanManagerService {
     xml {
-        tag: "WaypointPlanManagerService"
-        attr VehicleID: VehicleID
-        attr NumberWaypointsToServe: NumberWaypointsToServe
-        attr NumberWaypointsOverlap: NumberWaypointsOverlap
-        attr DefaultLoiterRadius_m: DefaultLoiterRadius_m
-        attr "param.turnType": ParamTurnType
-        attr AddLoiterToEndOfSegments: AddLoiterToEndOfSegments
-        attr AddLoiterToEndOfMission: AddLoiterToEndOfMission
-        attr LoopBackToFirstTask: LoopBackToFirstTask
-        attr GimbalPayloadId: GimbalPayloadId
+        foreach vehicles {
+            tag: "Service"
+            attr Type: "WaypointPlanManagerService"
+            attr VehicleID: vehicles.ID
+            attr NumberWaypointsToServe: NumberWaypointsToServe
+            attr NumberWaypointsOverlap: NumberWaypointsOverlap
+            attr DefaultLoiterRadius_m: DefaultLoiterRadius_m
+            attr "param.turnType": ParamTurnType
+            attr AddLoiterToEndOfSegments: AddLoiterToEndOfSegments
+            attr AddLoiterToEndOfMission: AddLoiterToEndOfMission
+            attr LoopBackToFirstTask: LoopBackToFirstTask
+            attr GimbalPayloadId: GimbalPayloadId
+        }
     }
 }
 
 service PlanBuilderService {
     xml {
-        tag: "PlanBuilderService"
+        tag: "Service"
+        attr Type: "PlanBuilderService"
         attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
     }
 }
 
 service SendMessagesService {
     xml {
-        tag: "SendMessagesService"
+        tag: "Service"
+        attr Type: "SendMessagesService"
         attr PathToMessageFiles: PathToMessageFiles
         children messages {
             tag: "Message"
@@ -113,7 +129,8 @@ service SendMessagesService {
 
 service MessageLoggerDataService {
     xml {
-        tag: "MessageLoggerDataService"
+        tag: "Service"
+        attr Type: "MessageLoggerDataService"
         attr LogFileMessageCountLimit: LogFileMessageCountLimit
         attr FilesPerSubDirectory: FilesPerSubDirectory
         children LogMessages {

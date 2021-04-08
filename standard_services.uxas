@@ -32,7 +32,6 @@ service SensorManagerService {
 }
 
 service WaypointPlanManagerService {
-    VehicleID: "*"
     NumberWaypointsToServe: 15
     NumberWaypointsOverlap: 5
     DefaultLoiterRadius_m: 250

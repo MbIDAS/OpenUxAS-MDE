@@ -17,7 +17,9 @@ XMLDef:
 Field:
     field=TagField |
     field=AttrField |
+    field=ChildField |
     field=ChildrenField |
+    field=ForeachField |
     field=ValueField |
     field=RenderField
     ;
@@ -32,8 +34,27 @@ AttrField:
     ;
 
 ChildrenField:
-    "children" children_source=ID "{"
+    "children" children_source=ID containing_tag=ContainingTag? "{"
         children*=Field
+    "}" |
+    "children" children_source=ID containing_tag=ContainingTag?"{"
+        children*=Field
+    "}"
+    ;
+
+ContainingTag:
+    "tag" containing_tag=ID |
+    "tag" containing_tag=STRING
+    ;
+
+ChildField:
+    "child" tag_name=ID ":" child_value=ValueSpec |
+    "child" tag_name=STRING ":" child_value=ValueSpec
+    ;
+
+ForeachField:
+    "foreach" foreach*=ID "{"
+        foreach_fields*=Field
     "}"
     ;
 
@@ -42,11 +63,11 @@ ValueField:
     ;
 
 RenderField:
-    "render" ":" value=ValueSpec
+    "render" containing_tag=ContainingTag? ":" value=ValueSpec
     ;
 
 ValueSpec:
-    value=CurrentValue | value=StringValue | value=NamedValue
+    value=CurrentValue | value=StringValue | value=ForeachValue | value=NamedValue
     ;
 
 StringValue:
@@ -55,6 +76,10 @@ StringValue:
 
 NamedValue:
     name=ID
+    ;
+
+ForeachValue:
+    foreach=ID '.' name=ID
     ;
 
 CurrentValue:

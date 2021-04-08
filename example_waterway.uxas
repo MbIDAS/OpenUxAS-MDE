@@ -12,4 +12,26 @@ uxas {
     services: [
         include "standard_services.uxas"
     ]
+
+
+    vehicles: [
+        vehicle {
+            ID: 400
+            Label: UAV_400
+            include UAV1 @ "standard_vehicles.uxas"
+            state: vehicle_state {
+                ID: 400
+                include UAV1_state @ "standard_vehicles.uxas"
+            }
+        }
+        vehicle {
+            ID: 500
+            Label: UAV_500
+            include UAV1 @ "standard_vehicles.uxas"
+            state: vehicle_state {
+                ID: 500
+                include UAV1_state @ "standard_vehicles.uxas"
+            }
+        }
+    ]
 }

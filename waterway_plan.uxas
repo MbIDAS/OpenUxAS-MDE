@@ -1,11 +1,22 @@
 
-planItem {
-    StartDelay_ms: 2000
+plan {
     Label: PISR_FromGoogleEarth
-    task {
-        include "line_search_task.uxas"
-        TaskID: 1000
-    }
+    Tasks: [
+        task {
+            include "line_search_task.uxas"
+            TaskID: 1000
+        }
+    ]
     Entities: [ 400 500 ]
+    Schedule: [
+        AutomationRequest {
+            Series: CMASI
+            ID: 1001
+            Label: "PISR_FromGoogleEarth"
+            TaskList: [ 1000 ]
+            EntityList: [ 400, 500 ]
+            StartDelay: 5000
+        }
+    ]
 }
 

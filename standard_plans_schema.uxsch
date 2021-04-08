@@ -1,0 +1,65 @@
+task LineSearchTask {
+    xml {
+        tag: "LineSearchTask"
+        attr Series: Series
+        children PointList tag "PointList" {
+            render: _
+        }
+        children ViewAngleList tag "ViewAngleList" {
+            render: _
+        }
+        child UseInertialViewAngles: UseInertialViewAngles
+        child TaskID: TaskID
+        child Label: Label
+        children EligibleEntities tag "EligibleEntities" {
+            tag: "int64"
+            value: _
+        }
+        child RevisitRate: RevisitRate
+        children Parameters tag "Parameters" {
+            render: _
+        }
+        child Priority: Priority
+        child Required: Required
+        children DesiredWavelengthBands tag "DesiredWavelengthBands" {
+            tag: "WavelengthBand"
+            value: _
+        }
+        child DwellTime: DwellTime
+        child GroundSampleDistance: GroundSampleDistance
+    }
+}
+
+wedge {
+    xml {
+        tag: "Wedge"
+        attr Series: Series
+        child AzimuthCenterline: AzimuthCenterline
+        child VerticalCenterline: VerticalCenterline
+    }
+}
+
+parameter {
+    xml {
+        tag: "KeyValuePair"
+        child Key: Key
+        child Value: Value
+    }
+}
+
+AutomationRequest {
+    xml {
+        tag: "AutomationRequest"
+        attr Series: Series
+        child ID: ID
+        child Label: Label
+        children EntityList tag "EntityList" {
+            tag: "int64"
+            value: _
+        }
+        children TaskList tag "TaskList" {
+            tag: "int64"
+            value: _
+        }
+    }
+}

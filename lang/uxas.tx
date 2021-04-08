@@ -16,7 +16,11 @@ OptComma:
 
 FieldValue:
     value=Include OptComma | value=OverrideStruct OptComma | value=RemoveStruct OptComma | value=StructValue OptComma |
-    value=NUMBER OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
+    value=NUMBER OptComma | value=ForeachValue OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
+    ;
+
+ForeachValue:
+    foreach=ID '.' field=ID
     ;
 
 ArrayValue:

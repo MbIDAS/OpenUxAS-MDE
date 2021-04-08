@@ -1,19 +1,22 @@
 vehicle UAV1 {
+    Series: CMASI
     MinimumSpeed: 18.0055561065674
     MaximumSpeed: 33.4388885498047
     NominalSpeed: 22.0
     NominalAltitude: 700.0
     NominalAltitudeType: MSL
-    NominalFlightProfile: flightProfile {
+    NominalFlightProfile: FlightProfile {
         Airspeed: 22.1211109161377
         PitchAngle: 0
         VerticalSpeed: 0
         MaxBankAngle: 20
         EnergyRate: 0.000277999992249534
     }
+    AlternateFlightProfiles: []
     PayloadConfigurationList: [
         GimbalConfiguration {
             Series: CMASI
+            SupportedPointingModes: []
             MinAzimuth: -180.0
             MaxAzimuth: 180.0
             IsAzimuthClamped: true
@@ -26,8 +29,9 @@ vehicle UAV1 {
             MaxAzimuthSlewRate: 114.59
             MaxElevationSlewRate: 114.59
             MaxRotationRate: 0.0
-            ContainedPayloads: [ 10001 ]
+            ContainedPayloadList: [ 10001 ]
             PayloadID: 1
+            PayloadKind: ""
         }
         CameraConfiguration {
             Series: CMASI
@@ -40,17 +44,21 @@ vehicle UAV1 {
             VideoStreamHorizontalResolution: 1024
             VideoStreamVerticalResolution: 768
             PayloadID: 10001
+            PayloadKind: ""
         }
     ]
     AvailableLoiterTypes: ["Circular"]
     AvailableTurnTypes: [ "TurnShort" "FlyOver" ]
     MinimumAltitude: 0
-    MaximumAltiture: 1000000
+    MaximumAltitude: 1000000
     MinAltAboveGround: 0
+    Time: 0
 }
 
-Vehicle_initial_state UAV1_state {
+vehicle_state UAV1_state {
+    Series: CMASI
     Location: location3d {
+        Series: CMASI
         Altitude: 700
         AltitudeType: MSL
         Latitude: 45.3171
@@ -73,7 +81,7 @@ Vehicle_initial_state UAV1_state {
     ActualEnergyRate: 0
     EnergyAvailable: 100
     WindSpeed: 0
-    windDirection: 0
+    WindDirection: 0
     GroundSpeed: 0
     GroundTrack: 0
     PayloadStateList: [
@@ -84,13 +92,17 @@ Vehicle_initial_state UAV1_state {
             Elevation: -45.0
             Rotation: 0.0
             PayloadID: 1
+            PayloadKind: ""
         }
         CameraState {
             Series: CMASI
             HorizontalFieldOfView: 45.0
+            Footprint: ""
             PayloadID: 10001
+            PayloadKind: ""
         }
     ]
+    AssociatedTasks: []
     CurrentWaypoint: 0
     CurrentCommand: 0
     Mode: Waypoint

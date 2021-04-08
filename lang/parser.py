@@ -1,5 +1,4 @@
 from textx.metamodel import metamodel_from_file
-import collections
 import textx.model
 
 uxas_meta = metamodel_from_file("/extra/midas/openuxas-mde/lang/uxas.tx")
@@ -20,6 +19,7 @@ class UxasParser:
     def __init__(self):
         self.config = {}
         self.configs = []
+        self.config_types = {}
 
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
@@ -32,6 +32,11 @@ class UxasParser:
                     for simp in simplified:
                         for k, v in simp.items():
                             struct_value[k] = v
+
+            if struct_value["struct_type"] not in self.config_types:
+                self.config_types[struct_value["struct_type"]] = [struct_value]
+            else:
+                self.config_types[struct_value["struct_type"]].append(struct_value)
 
             return struct_value
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["Include"]):
@@ -58,7 +63,37 @@ class UxasParser:
 
     def simplify(self):
         for cfg in self.config.config:
-            self.configs.append(self.simplify_ast(cfg))
+            simplified = self.simplify_ast(cfg)
+            self.configs.append(simplified)
+
+        for cfglist in self.config_types.values():
+            for cfg in cfglist:
+                continue
+                if len(cfg["foreach"]) == 0:
+                    continue
+
+                all_foreach = []
+
+                for f in cfg["foreach"]:
+                    if f not in cfg:
+                        print("Warning: No items named "+f+" available for foreach in "+
+                              cfg["struct_type"]+" "+cfg["type"])
+                        continue
+
+                    flist = cfg[f]
+                    if len(all_foreach) == 0:
+                        for fitem in flist:
+                            all_foreach.append({f: fitem})
+                    else:
+                        new_all = []
+                        for fitem in flist:
+                            for allitem in all_foreach:
+                                c = allitem.copy()
+                                c[f] = fitem
+                                new_all.append(c)
+                        all_foreach = new_all
+
+                cfg["foreach"] = all_foreach
 
     def load_config_from_file(self, filename):
         self.config = uxas_meta.model_from_file(filename)
