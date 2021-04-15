@@ -2,6 +2,11 @@ UxAS_Schema:
     schemas *= SchemaDef
     ;
 
+Comment:
+    /\/\/.*$/ |
+    /\/\*.*\*\//
+    ;
+
 SchemaDef:
     struct_type=ID type=ID? '{'
         xml=XMLDef?

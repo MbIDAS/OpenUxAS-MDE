@@ -6,11 +6,13 @@ vehicle UAV1 {
     NominalAltitude: 700.0
     NominalAltitudeType: MSL
     NominalFlightProfile: FlightProfile {
+        Series: CMASI
         Airspeed: 22.1211109161377
         PitchAngle: 0
         VerticalSpeed: 0
         MaxBankAngle: 20
         EnergyRate: 0.000277999992249534
+        Name: ""
     }
     AlternateFlightProfiles: []
     PayloadConfigurationList: [

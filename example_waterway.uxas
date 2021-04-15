@@ -1,9 +1,12 @@
 
+// This is the example waterway configuration
 
 uxas {
+    Name: example_waterway
     FormatVersion: "1.0"
     EntityID: 100
     EntityType: Aircraft
+    Foobar: "foo/*lalala"
 
     networks: [
         include "bridge_amase_standard.uxas"
@@ -13,6 +16,7 @@ uxas {
         include "standard_services.uxas"
     ]
 
+/* Here is some stuff in a comment */
 
     vehicles: [
         vehicle {

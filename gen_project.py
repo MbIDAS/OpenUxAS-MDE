@@ -3,11 +3,12 @@ from lang.schema import UxasSchemaParser
 from target.render import UxasXMLRenderer
 import xml.etree.ElementTree as ET
 import os
+import datetime
 import xml.dom.minidom
 
 def write_elementtree(elem, filename):
     xmlstr = xml.dom.minidom.parseString(ET.tostring(elem)).toprettyxml()
-    file = open(filename,"w")
+    file = open(filename, "w")
     file.write(xmlstr)
     file.close()
 
@@ -27,8 +28,16 @@ uxas_plan_parser.load_config_from_file("/extra/midas/openuxas-mde/waterway_plan.
 
 renderer = UxasXMLRenderer(uxas_schema_parser.schemas)
 
+amase_schema_parser = UxasSchemaParser()
+amase_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/amase_schema.uxsch")
+
+amase_renderer = UxasXMLRenderer(amase_schema_parser.schemas)
+
 messages = []
 os.makedirs("MessagesToSend/tasks", 0o777, exist_ok=True)
+
+scen_veh_list = []
+scen_veh_state_list = []
 
 for vehicle_id in uxas_plan_parser.configs[0]["Entities"]:
     for vehicle in uxas_parser.configs[0]["vehicles"]:
@@ -40,12 +49,21 @@ for vehicle_id in uxas_plan_parser.configs[0]["Entities"]:
         filename = "AirVehicleConfiguration_V"+str(vehicle_id)+".xml"
         messages.append({"MessageFileName": filename, "SendTime_ms": 200})
         write_elementtree(vehicle_xml, "MessagesToSend/"+filename)
+        scen_veh_list.append(vehicle)
 
         vehicle_state_xml = renderer.render(None, vehicle["state"])
         tree = ET.ElementTree(vehicle_state_xml)
         filename = "AirVehicleState_V"+str(vehicle_id)+".xml"
         messages.append({"MessageFileName": filename, "SendTime_ms": 250})
         write_elementtree(vehicle_state_xml, "MessagesToSend/"+filename)
+        scen_veh_state_list.append(vehicle["state"])
+
+amase_config = {
+    "struct_type": "amase",
+    "type": "",
+    "ScenarioData": uxas_plan_parser.configs[0]["ScenarioData"],
+    "ScenarioEventList": scen_veh_list + scen_veh_state_list
+}
 
 for task in uxas_plan_parser.configs[0]["Tasks"]:
     task_xml = renderer.render(None, task)
@@ -69,6 +87,18 @@ uxas_parser.configs[0]["services"].append(sendMessageService)
 
 config = renderer.render(None, uxas_parser.configs[0])
 
-tree = ET.ElementTree(config)
-write_elementtree(config, "example_waterwaycfg.xml")
+config_filename = "cfg_"+uxas_parser.configs[0]["Name"]+".xml"
+write_elementtree(config, config_filename)
 
+amase_xml = amase_renderer.render(None, amase_config)
+scenario_filename = "Scenario_"+uxas_parser.configs[0]["Name"]+".xml"
+write_elementtree(amase_xml, scenario_filename)
+
+config_file = open("config.yaml", "w")
+config_file.writelines(["amase:\n",
+                        "  scenario: "+scenario_filename+"\n",
+                        "\n",
+                        "uxas:\n",
+                        "  config: "+config_filename+"\n",
+                        "  rundir: RUNDIR_"+uxas_parser.configs[0]["Name"]+"\n"])
+config_file.close()

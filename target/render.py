@@ -90,6 +90,7 @@ class UxasXMLRenderer:
         for field in xml_schema:
             if field["type"] == "tag":
                 tag_name = self.get_value(obj, field["tag_value"], foreach_map)
+                break
             elif field["type"] == "render" and not "containing_tag" in field:
                 return self.render_with_top(parent, obj, top)
 

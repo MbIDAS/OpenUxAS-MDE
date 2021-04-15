@@ -1,3 +1,33 @@
+amase {
+    xml {
+        tag: "AMASE"
+        render: ScenarioData
+        children ScenarioEventList tag ScenarioEventList {
+            render: _
+        }
+    }
+}
+
+ScenarioData {
+    xml {
+        tag: "ScenarioData"
+        render: SimulationView
+        child ScenarioName: ScenarioName
+        child Date: Date
+        child ScenarioDuration: ScenarioDuration
+        child TrackAgeOut: TrackAgeOut
+    }
+}
+
+SimulationView {
+    xml {
+        tag: "SimulationView"
+        attr LongExtent: LongExtent
+        attr Latitude: Latitude
+        attr Longitude: Longitude
+    }
+}
+
 vehicle {
     xml {
         tag: "AirVehicleConfiguration"
