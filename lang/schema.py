@@ -1,7 +1,11 @@
 from textx.metamodel import metamodel_from_file
 import textx.model
+import os.path
+import sys
 
-uxas_meta = metamodel_from_file("/extra/midas/openuxas-mde/lang/uxas_schema.tx")
+
+lang_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lang")
+uxas_meta = metamodel_from_file(os.path.join(lang_dir, "uxas_schema.tx"))
 
 class UxasSchemaParser:
     def __init__(self):
@@ -70,8 +74,3 @@ class UxasSchemaParser:
                 self.schemas[simplified_schema["struct_type"]] = { simplified_schema["type"]: simplified_schema }
             else:
                 self.schemas[simplified_schema["struct_type"]][simplified_schema["type"]] = simplified_schema
-
-sch = uxas_meta.model_from_file("/extra/midas/openuxas-mde/network_schema.uxsch")
-
-schema_parser = UxasSchemaParser()
-schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/network_schema.uxsch")

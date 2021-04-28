@@ -1,7 +1,10 @@
 from textx.metamodel import metamodel_from_file
 import textx.model
+import os.path
+import sys
 
-uxas_meta = metamodel_from_file("/extra/midas/openuxas-mde/lang/uxas.tx")
+lang_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lang")
+uxas_meta = metamodel_from_file(os.path.join(lang_dir, "uxas.tx"))
 
 class ParseError(Exception):
     def __init__(self, error, obj=None, parser=None):
@@ -16,10 +19,11 @@ class ParseError(Exception):
 
 
 class UxasParser:
-    def __init__(self):
+    def __init__(self, lib_dir):
         self.config = {}
         self.configs = []
         self.config_types = {}
+        self.lib_dir = lib_dir
 
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
@@ -41,7 +45,14 @@ class UxasParser:
             return struct_value
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["Include"]):
             cfgs = []
-            included_cfg = uxas_meta.model_from_file(node.filename)
+            included_cfg = []
+            if os.path.exists(node.filename):
+                included_cfg = uxas_meta.model_from_file(node.filename)
+            elif os.path.exists(os.path.join(self.lib_dir, node.filename)):
+                included_cfg = uxas_meta.model_from_file(os.path.join(self.lib_dir, node.filename))
+            else:
+                raise ParseError("Unable to locate included file "+node.filename)
+
             for cfg in included_cfg.config:
                 if node.include_ref:
                     if cfg.type == node.include_ref.item_ref:
@@ -98,9 +109,3 @@ class UxasParser:
     def load_config_from_file(self, filename):
         self.config = uxas_meta.model_from_file(filename)
         self.simplify()
-#try:
-#    uxas_parser = UxasParser()
-#    uxas_parser.load_config_from_file("/extra/midas/openuxas-mde/example_waterway.uxas")
-
-#except ParseError as err:
-#    print(err.error)

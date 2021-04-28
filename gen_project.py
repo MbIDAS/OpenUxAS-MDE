@@ -3,8 +3,26 @@ from lang.schema import UxasSchemaParser
 from target.render import UxasXMLRenderer
 import xml.etree.ElementTree as ET
 import os
+import sys
 import datetime
 import xml.dom.minidom
+import argparse
+
+def load_uxas_schemas(lib_dir):
+    uxas_schema_parser = UxasSchemaParser()
+    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "network_schema.uxsch"))
+    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_services_schema.uxsch"))
+    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "uxas_configuration_schema.uxsch"))
+    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_vehicles_schema.uxsch"))
+    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_plans_schema.uxsch"))
+
+    return uxas_schema_parser
+
+def load_amase_schemas(lib_dir):
+    amase_schema_parser = UxasSchemaParser()
+
+    amase_schema_parser.load_schema_from_file(os.path.join(lib_dir, "amase_schema.uxsch"))
+    return amase_schema_parser
 
 def write_elementtree(elem, filename):
     xmlstr = xml.dom.minidom.parseString(ET.tostring(elem)).toprettyxml()
@@ -13,23 +31,30 @@ def write_elementtree(elem, filename):
     file.close()
 
 
-uxas_parser = UxasParser()
-uxas_parser.load_config_from_file("/extra/midas/openuxas-mde/example_waterway.uxas")
+lib_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lib")
 
-uxas_schema_parser = UxasSchemaParser()
-uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/network_schema.uxsch")
-uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/standard_services_schema.uxsch")
-uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/uxas_configuration_schema.uxsch")
-uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/standard_vehicles_schema.uxsch")
-uxas_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/standard_plans_schema.uxsch")
+arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
+arg_parser.add_argument('-lib', nargs=2, default=lib_dir)
 
-uxas_plan_parser = UxasParser()
-uxas_plan_parser.load_config_from_file("/extra/midas/openuxas-mde/waterway_plan.uxas")
+parsed_args, rest_args = arg_parser.parse_known_args()
+parsed_args = vars(parsed_args)
+
+lib_dir = parsed_args["lib"]
+
+print("lib_dir = ", lib_dir)
+uxas_schema_parser = load_uxas_schemas(lib_dir)
+
+uxas_parser = UxasParser(lib_dir)
+if len(rest_args) > 0:
+    uxas_parser.load_config_from_file(rest_args[0])
+
+uxas_plan_parser = UxasParser(lib_dir)
+if len(rest_args) > 1:
+    uxas_plan_parser.load_config_from_file(rest_args[1])
 
 renderer = UxasXMLRenderer(uxas_schema_parser.schemas)
 
-amase_schema_parser = UxasSchemaParser()
-amase_schema_parser.load_schema_from_file("/extra/midas/openuxas-mde/amase_schema.uxsch")
+amase_schema_parser = load_amase_schemas(lib_dir)
 
 amase_renderer = UxasXMLRenderer(amase_schema_parser.schemas)
 
