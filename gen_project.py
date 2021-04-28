@@ -8,21 +8,24 @@ import datetime
 import xml.dom.minidom
 import argparse
 
-def load_uxas_schemas(lib_dir):
-    uxas_schema_parser = UxasSchemaParser()
-    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "network_schema.uxsch"))
-    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_services_schema.uxsch"))
-    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "uxas_configuration_schema.uxsch"))
-    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_vehicles_schema.uxsch"))
-    uxas_schema_parser.load_schema_from_file(os.path.join(lib_dir, "standard_plans_schema.uxsch"))
+
+def load_uxas_schemas(lib_path):
+    uxas_schema_parser = UxasSchemaParser(lib_path)
+    uxas_schema_parser.load_schema_from_file("network_schema.uxsch")
+    uxas_schema_parser.load_schema_from_file("standard_services_schema.uxsch")
+    uxas_schema_parser.load_schema_from_file("uxas_configuration_schema.uxsch")
+    uxas_schema_parser.load_schema_from_file("standard_vehicles_schema.uxsch")
+    uxas_schema_parser.load_schema_from_file("standard_plans_schema.uxsch")
 
     return uxas_schema_parser
 
-def load_amase_schemas(lib_dir):
-    amase_schema_parser = UxasSchemaParser()
 
-    amase_schema_parser.load_schema_from_file(os.path.join(lib_dir, "amase_schema.uxsch"))
+def load_amase_schemas(lib_path):
+    amase_schema_parser = UxasSchemaParser(lib_path)
+
+    amase_schema_parser.load_schema_from_file("amase_schema.uxsch")
     return amase_schema_parser
+
 
 def write_elementtree(elem, filename):
     xmlstr = xml.dom.minidom.parseString(ET.tostring(elem)).toprettyxml()
@@ -31,30 +34,33 @@ def write_elementtree(elem, filename):
     file.close()
 
 
-lib_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lib")
+system_lib_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lib")
 
 arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
-arg_parser.add_argument('-lib', nargs=2, default=lib_dir)
+arg_parser.add_argument('-libpath', nargs=2, default="")
 
 parsed_args, rest_args = arg_parser.parse_known_args()
 parsed_args = vars(parsed_args)
 
-lib_dir = parsed_args["lib"]
+lib_path_args = []
+if "libpath" in parsed_args:
+    lib_path_args = parsed_args["libpath"].split(os.pathsep)
 
-print("lib_dir = ", lib_dir)
-uxas_schema_parser = load_uxas_schemas(lib_dir)
+lib_path = lib_path_args + [system_lib_path]
 
-uxas_parser = UxasParser(lib_dir)
+uxas_schema_parser = load_uxas_schemas(lib_path)
+
+uxas_parser = UxasParser(lib_path)
 if len(rest_args) > 0:
     uxas_parser.load_config_from_file(rest_args[0])
 
-uxas_plan_parser = UxasParser(lib_dir)
+uxas_plan_parser = UxasParser(lib_path)
 if len(rest_args) > 1:
     uxas_plan_parser.load_config_from_file(rest_args[1])
 
 renderer = UxasXMLRenderer(uxas_schema_parser.schemas)
 
-amase_schema_parser = load_amase_schemas(lib_dir)
+amase_schema_parser = load_amase_schemas(lib_path)
 
 amase_renderer = UxasXMLRenderer(amase_schema_parser.schemas)
 

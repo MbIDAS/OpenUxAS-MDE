@@ -2,14 +2,15 @@ from textx.metamodel import metamodel_from_file
 import textx.model
 import os.path
 import sys
-
+from .util import get_filename_in_path
 
 lang_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lang")
 uxas_meta = metamodel_from_file(os.path.join(lang_dir, "uxas_schema.tx"))
 
 class UxasSchemaParser:
-    def __init__(self):
+    def __init__(self, lib_path):
         self.schemas = {}
+        self.lib_path = lib_path
 
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["SchemaDef"]):
@@ -67,7 +68,8 @@ class UxasSchemaParser:
             return node
 
     def load_schema_from_file(self, filename):
-        schemas = uxas_meta.model_from_file(filename)
+        filename_in_path = get_filename_in_path(self.lib_path, filename)
+        schemas = uxas_meta.model_from_file(filename_in_path)
         for schema in schemas.schemas:
             simplified_schema = self.simplify_ast(schema)
             if simplified_schema["struct_type"] not in self.schemas:

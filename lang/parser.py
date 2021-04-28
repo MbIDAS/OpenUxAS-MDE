@@ -2,6 +2,7 @@ from textx.metamodel import metamodel_from_file
 import textx.model
 import os.path
 import sys
+from .util import get_filename_in_path
 
 lang_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lang")
 uxas_meta = metamodel_from_file(os.path.join(lang_dir, "uxas.tx"))
@@ -19,11 +20,11 @@ class ParseError(Exception):
 
 
 class UxasParser:
-    def __init__(self, lib_dir):
+    def __init__(self, lib_path):
         self.config = {}
         self.configs = []
         self.config_types = {}
-        self.lib_dir = lib_dir
+        self.lib_dir = lib_path
 
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
@@ -46,12 +47,8 @@ class UxasParser:
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["Include"]):
             cfgs = []
             included_cfg = []
-            if os.path.exists(node.filename):
-                included_cfg = uxas_meta.model_from_file(node.filename)
-            elif os.path.exists(os.path.join(self.lib_dir, node.filename)):
-                included_cfg = uxas_meta.model_from_file(os.path.join(self.lib_dir, node.filename))
-            else:
-                raise ParseError("Unable to locate included file "+node.filename)
+            filename = get_filename_in_path(["."] + self.lib_dir, node.filename)
+            included_cfg = uxas_meta.model_from_file(filename)
 
             for cfg in included_cfg.config:
                 if node.include_ref:
