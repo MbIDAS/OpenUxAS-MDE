@@ -44,7 +44,6 @@ parsed_args, rest_args = arg_parser.parse_known_args()
 parsed_args = vars(parsed_args)
 
 output_dir = parsed_args["o"][0]
-print("output_dir=",output_dir)
 
 lib_path_args = []
 if "libpath" in parsed_args:
