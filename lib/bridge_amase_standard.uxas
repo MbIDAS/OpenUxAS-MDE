@@ -1,4 +1,4 @@
-bridge LmcpObjectNetworkTcpBridge {
+network LmcpObjectNetworkTcpBridge {
     TcpAddress: "tcp://127.0.0.1:5555",
     Server: false,
     Subscriptions: ["afrl.cmasi.MissionCommand",

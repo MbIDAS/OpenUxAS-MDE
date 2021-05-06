@@ -1,5 +1,8 @@
 
 service StatusReportService {
+    fields {
+        VehicleId { type: integer, required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "StatusReportService"
@@ -36,6 +39,10 @@ service AutomationRequestValidatorService {
 }
 
 service RoutePlannerVisibilityService {
+    fields {
+        TurnRadiusOffset_m { type: float, required: true }
+        MinimumWaypointSeparation_m { type: float, required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "RoutePlannerVisibilityService"
@@ -45,6 +52,9 @@ service RoutePlannerVisibilityService {
 }
 
 service PlanBuilderService {
+    fields {
+        AssignmentStartPointLead_m { type: float, required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "PlanBuilderService"
@@ -53,6 +63,10 @@ service PlanBuilderService {
 }
 
 service SendMessagesService {
+    fields {
+        PathToMessageFiles { type: string, required: true }
+        messages { type: struct message SendMessagesServiceMessage , required: false }
+    }
     xml {
         tag: "Service"
         attr Type: "SendMessagesService"
@@ -65,6 +79,13 @@ service SendMessagesService {
     }
 }
 
+message SendMessagesServiceMessage {
+    fields {
+        MessageFileName { type: string, required: true }
+        SendTime_ms { type: integer, required: true }
+    }
+}
+
 service RouteAggregatorService {
     xml {
         tag: "Service"
@@ -73,6 +94,10 @@ service RouteAggregatorService {
 }
 
 service AssignmentTreeBranchBoundService {
+    fields {
+        NumberNodesMaximum { type: integer, required: true }
+        CostFunction { type: string, required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "AssignmentTreeBranchBoundService"
@@ -89,6 +114,16 @@ service AutomationDiagramDataService {
 }
 
 service WaypointPlanManagerService {
+    fields {
+        NumberWaypointsToServe { type: integer, required: true }
+        NumberWaypointsOverlap { type: integer, required: true }
+        DefaultLoiterRadius_m { type: float, required: true }
+        ParamTurnType { type: enum, values: [TurnShort, FlyOver], required: true }
+        AddLoiterToEndOfSegments { type: bool, required: true }
+        AddLoiterToEndOfMission { type: bool, required: true }
+        LoopBackToFirstTask { type: bool, required: true }
+        GimbalPayloadId { type: integer, required: true }
+    }
     xml {
         foreach vehicles {
             tag: "Service"
@@ -107,6 +142,9 @@ service WaypointPlanManagerService {
 }
 
 service PlanBuilderService {
+    fields {
+        AssignmentStartPointLead_m { type: float, required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "PlanBuilderService"
@@ -114,20 +152,14 @@ service PlanBuilderService {
     }
 }
 
-service SendMessagesService {
-    xml {
-        tag: "Service"
-        attr Type: "SendMessagesService"
-        attr PathToMessageFiles: PathToMessageFiles
-        children messages {
-            tag: "Message"
-            attr MessageFileName: MessageFileName
-            attr SendTime_ms: SendTime_ms
-        }
-    }
-}
-
 service MessageLoggerDataService {
+    fields {
+        LogFileMessageCountLimit { type: integer, required: true }
+        FilesPerSubDirectory { type: integer, required: true }
+        LogMessages { type: struct {
+                              NumberMessagesToSkip { type: integer, required: true }
+                            }[], required: true }
+    }
     xml {
         tag: "Service"
         attr Type: "MessageLoggerDataService"

@@ -15,15 +15,57 @@ class UxasSchemaParser:
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["SchemaDef"]):
             xml_fields = []
+            type_fields = []
+            if node.fields:
+                for f in node.fields.fieldDefs:
+                    type_fields.append(self.simplify_ast(f))
             if node.xml:
                 xml_fields = self.simplify_ast(node.xml)
-            s = {"type": node.type, "struct_type": node.struct_type, "xml": xml_fields}
+            s = {"type": node.type, "struct_type": node.struct_type, "fields": type_fields, "xml": xml_fields}
             return s
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["XMLDef"]):
             fields = []
             for field in node.fields:
                 fields.append(self.simplify_ast(field))
             return fields
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldsDef"]):
+            field_defs = []
+            for field_def in node.fieldDefs:
+                field_defs.append(self.simplify_ast(field_def))
+            return field_defs
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldDef"]):
+            field_name = node.fieldName
+            required = False
+            field_type = {}
+            field_values = None
+            for attr in node.fieldAttrs:
+                if attr.attrType == "type":
+                    field_type = self.simplify_ast(attr.type)
+                elif attr.attrType == "required":
+                    required = attr.required
+                elif attr.attrType == "values":
+                    field_values = []
+                    for v in attr.values:
+                        field_values.append(self.simplify_ast(v))
+            field_type["field_name"] = field_name
+            field_type["field_required"] = required
+            if field_values:
+                field_type["field_values"] = field_values
+            return field_type
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldType"]):
+            if node.struct_name:
+                return {"field_type": "struct", "struct_type": node.struct_name, "struct_type_name": node.struct_type,
+                         "is_array": node.is_array}
+            elif node.type_name != "struct":
+                return {"field_type": node.type_name, "is_array": node.is_array}
+            else:
+                anonymous_defs = []
+                for field_def in node.fieldDefs:
+                    anonymous_defs.append(self.simplify_ast(field_def))
+                return {"field_type": "struct", "anonymous_struct": { "fields": anonymous_defs },
+                        "is_array": node.is_array}
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldDefValue"]):
+            return node.fieldDefValue
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["Field"]):
             return self.simplify_ast(node.field)
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["TagField"]):

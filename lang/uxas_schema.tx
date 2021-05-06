@@ -9,8 +9,35 @@ Comment:
 
 SchemaDef:
     struct_type=ID type=ID? '{'
+        fields=FieldsDef?
         xml=XMLDef?
     '}'
+    ;
+
+FieldsDef:
+    "fields" "{"
+        fieldDefs *= FieldDef
+    "}"
+    ;
+
+FieldDef:
+    fieldName=ID "{" fieldAttrs *= FieldDefAttr "}"
+    ;
+
+FieldDefAttr:
+    attrType="type" ":" type=FieldType ","?|
+    attrType="required" ":" required=BOOL ","?|
+    attrType="values" ":" "[" values *= FieldDefValue "]" ","?
+    ;
+
+FieldType:
+    type_name="struct" "{" fieldDefs *= FieldDef "}" is_array="[]"? |
+    type_name="struct" struct_name=ID? struct_type=ID? is_array="[]"? |
+    type_name=ID is_array="[]"?
+    ;
+
+FieldDefValue:
+    fieldDefValue=ID ","?
     ;
 
 XMLDef:

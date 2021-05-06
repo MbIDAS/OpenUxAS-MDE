@@ -1,5 +1,12 @@
 
 uxas {
+    fields {
+        FormatVersion { type: float, required: true }
+        EntityID { type: integer, required: true }
+        EntityType { type: string, required: true }
+        networks { type: struct network[], required: true }
+        services { type: struct service[], required: true }
+    }
     xml {
         tag: "UxAS"
         attr FormatVersion: FormatVersion

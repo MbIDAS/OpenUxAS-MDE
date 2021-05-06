@@ -1,5 +1,6 @@
 from lang.parser import UxasParser
 from lang.schema import UxasSchemaParser
+from lang.type_checker import TypeChecker
 from target.render import UxasXMLRenderer
 import xml.etree.ElementTree as ET
 import os
@@ -60,6 +61,9 @@ uxas_parser = UxasParser(lib_path)
 if len(rest_args) > 0:
     uxas_parser.load_config_from_file(rest_args[0])
 
+type_checker = TypeChecker(uxas_schema_parser.schemas)
+type_checker.check_types(uxas_parser.configs[0])
+
 uxas_plan_parser = UxasParser(lib_path)
 if len(rest_args) > 1:
     uxas_plan_parser.load_config_from_file(rest_args[1])
@@ -113,7 +117,8 @@ for sched in uxas_plan_parser.configs[0]["Schedule"]:
     sched_xml = renderer.render(None, sched)
     tree = ET.ElementTree(sched_xml)
     filename = "tasks/"+str(sched["ID"])+"_AutomationRequest_"+sched["Label"]+".xml"
-    messages.append({"MessageFileName": filename, "SendTime_ms": sched["StartDelay"]})
+    messages.append({"struct_type": "message", "type": "SendMessagesServiceMessage",
+                     "MessageFileName": filename, "SendTime_ms": sched["StartDelay"]})
     write_elementtree(sched_xml, os.path.join(output_dir, "MessagesToSend", filename))
 
 sendMessageService = {"struct_type": "service", "type": "SendMessagesService",
