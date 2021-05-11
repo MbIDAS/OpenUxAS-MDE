@@ -104,3 +104,7 @@ class TypeChecker:
                 return
             else:
                 print("Field "+field["field_name"]+" value "+val+" is not a bool")
+        elif field["field_type"] == "enum":
+            if val not in field["field_values"]:
+                print("Field "+field["field_name"]+" value "+val+" is not one of "+", ".join(field["field_values"]))
+
