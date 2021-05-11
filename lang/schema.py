@@ -14,70 +14,70 @@ class UxasSchemaParser:
 
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["SchemaDef"]):
-            xml_fields = []
-            type_fields = []
-            if node.fields:
-                for f in node.fields.fieldDefs:
-                    type_fields.append(self.simplify_ast(f))
+            xml_params = []
+            type_params = []
+            if node.params:
+                for f in node.params.paramDefs:
+                    type_params.append(self.simplify_ast(f))
             if node.xml:
-                xml_fields = self.simplify_ast(node.xml)
-            s = {"type": node.type, "struct_type": node.struct_type, "fields": type_fields, "xml": xml_fields}
+                xml_params = self.simplify_ast(node.xml)
+            s = {"type": node.type, "struct_type": node.struct_type, "params": type_params, "xml": xml_params}
             return s
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["XMLDef"]):
-            fields = []
-            for field in node.fields:
-                fields.append(self.simplify_ast(field))
-            return fields
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldsDef"]):
-            field_defs = []
-            for field_def in node.fieldDefs:
-                field_defs.append(self.simplify_ast(field_def))
-            return field_defs
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldDef"]):
-            field_name = node.fieldName
+            params = []
+            for param in node.params:
+                params.append(self.simplify_ast(param))
+            return params
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamsDef"]):
+            param_defs = []
+            for param_def in node.paramDefs:
+                param_defs.append(self.simplify_ast(param_def))
+            return param_defs
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamDef"]):
+            param_name = node.paramName
             required = False
-            field_type = {}
-            field_values = None
-            for attr in node.fieldAttrs:
+            param_type = {}
+            param_values = None
+            for attr in node.paramAttrs:
                 if attr.attrType == "type":
-                    field_type = self.simplify_ast(attr.type)
+                    param_type = self.simplify_ast(attr.type)
                 elif attr.attrType == "required":
                     required = attr.required
                 elif attr.attrType == "values":
-                    field_values = []
+                    param_values = []
                     for v in attr.values:
-                        field_values.append(self.simplify_ast(v))
-            field_type["field_name"] = field_name
-            field_type["field_required"] = required
-            if field_values:
-                field_type["field_values"] = field_values
-            return field_type
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldType"]):
+                        param_values.append(self.simplify_ast(v))
+            param_type["param_name"] = param_name
+            param_type["param_required"] = required
+            if param_values:
+                param_type["param_values"] = param_values
+            return param_type
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamType"]):
             if node.struct_name:
-                return {"field_type": "struct", "struct_type": node.struct_name, "struct_type_name": node.struct_type,
+                return {"param_type": "struct", "struct_type": node.struct_name, "struct_type_name": node.struct_type,
                          "is_array": node.is_array}
             elif node.type_name != "struct":
-                return {"field_type": node.type_name, "is_array": node.is_array}
+                return {"param_type": node.type_name, "is_array": node.is_array}
             else:
                 anonymous_defs = []
-                for field_def in node.fieldDefs:
-                    anonymous_defs.append(self.simplify_ast(field_def))
-                return {"field_type": "struct", "anonymous_struct": { "fields": anonymous_defs },
+                for param_def in node.paramDefs:
+                    anonymous_defs.append(self.simplify_ast(param_def))
+                return {"param_type": "struct", "anonymous_struct": { "params": anonymous_defs },
                         "is_array": node.is_array}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["FieldDefValue"]):
-            return node.fieldDefValue
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["Field"]):
-            return self.simplify_ast(node.field)
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["TagField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamDefValue"]):
+            return node.paramDefValue
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["Param"]):
+            return self.simplify_ast(node.param)
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["TagParam"]):
             return {"type": "tag", "tag_value": self.simplify_ast(node.tag_value.value)}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["AttrField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["AttrParam"]):
             return {"type": "attr", "attr_type": node.attr_type, "attr_value": self.simplify_ast(node.attr_value.value)}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ChildField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ChildParam"]):
             return {"type": "child", "tag_name": node.tag_name, "child_value": self.simplify_ast(node.child_value.value)}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ChildrenField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ChildrenParam"]):
             children_schema = []
             for child in node.children:
-                children_schema.append(self.simplify_ast(child.field))
+                children_schema.append(self.simplify_ast(child.param))
             if node.containing_tag:
                 return {"type": "children", "children_source": node.children_source,
                         "children_schema": children_schema,
@@ -85,18 +85,18 @@ class UxasSchemaParser:
             else:
                 return {"type": "children", "children_source": node.children_source,
                         "children_schema": children_schema}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ForeachField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ForeachParam"]):
             foreach_schema = []
-            for f in node.foreach_fields:
-                foreach_schema.append(self.simplify_ast(f.field))
+            for f in node.foreach_params:
+                foreach_schema.append(self.simplify_ast(f.param))
             return {"type": "foreach", "foreach": node.foreach, "foreach_schema": foreach_schema}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["RenderField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["RenderParam"]):
             if node.containing_tag:
                 return {"type": "render", "value": self.simplify_ast(node.value.value),
                         "containing_tag": node.containing_tag.containing_tag}
             else:
                 return {"type": "render", "value": self.simplify_ast(node.value.value)}
-        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ValueField"]):
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ValueParam"]):
             return {"type": "value", "value": self.simplify_ast(node.value.value)}
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["StringValue"]):
             return {"value_type": "string", "value": node.string_value}

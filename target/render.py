@@ -78,20 +78,20 @@ class UxasXMLRenderer:
         tag_name = ""
 
         if len(xml_schema) == 1 and xml_schema[0]["type"] == "foreach":
-            field = xml_schema[0]
-            foreach_list = self.expand_foreach(field["foreach"], top)
+            param = xml_schema[0]
+            foreach_list = self.expand_foreach(param["foreach"], top)
             first_elem = None
             for foreach_map in foreach_list:
-                elem = self.render_with_schema(parent, obj, top, field["foreach_schema"], foreach_map)
+                elem = self.render_with_schema(parent, obj, top, param["foreach_schema"], foreach_map)
                 if first_elem is None:
                     first_elem = elem
             return first_elem
 
-        for field in xml_schema:
-            if field["type"] == "tag":
-                tag_name = self.get_value(obj, field["tag_value"], foreach_map)
+        for param in xml_schema:
+            if param["type"] == "tag":
+                tag_name = self.get_value(obj, param["tag_value"], foreach_map)
                 break
-            elif field["type"] == "render" and not "containing_tag" in field:
+            elif param["type"] == "render" and not "containing_tag" in param:
                 return self.render_with_top(parent, obj, top)
 
         if tag_name == "":
@@ -103,30 +103,30 @@ class UxasXMLRenderer:
         else:
             element = ET.SubElement(parent, tag_name)
 
-        for field in xml_schema:
-            if field["type"] == "attr":
-                element.attrib[field["attr_type"]] = str(self.get_value(obj, field["attr_value"], foreach_map))
-            elif field["type"] == "children":
-                children = obj[field["children_source"]]
+        for param in xml_schema:
+            if param["type"] == "attr":
+                element.attrib[param["attr_type"]] = str(self.get_value(obj, param["attr_value"], foreach_map))
+            elif param["type"] == "children":
+                children = obj[param["children_source"]]
                 child_container = element
-                if "containing_tag" in field and field["containing_tag"] is not None:
-                    child_container = ET.SubElement(element, field["containing_tag"])
+                if "containing_tag" in param and param["containing_tag"] is not None:
+                    child_container = ET.SubElement(element, param["containing_tag"])
                 for child in children:
-                    self.render_with_schema(child_container, child, top, field["children_schema"], foreach_map)
-            elif field["type"] == "child":
-                child_elem = ET.SubElement(element, field["tag_name"])
-                child_elem.text = str(self.get_value(obj, field["child_value"], foreach_map))
-            elif field["type"] == "foreach":
-                foreach_list = self.expand_foreach(field["foreach"], top)
+                    self.render_with_schema(child_container, child, top, param["children_schema"], foreach_map)
+            elif param["type"] == "child":
+                child_elem = ET.SubElement(element, param["tag_name"])
+                child_elem.text = str(self.get_value(obj, param["child_value"], foreach_map))
+            elif param["type"] == "foreach":
+                foreach_list = self.expand_foreach(param["foreach"], top)
                 for foreach_map in foreach_list:
-                    self.render_with_schema(element, obj, top, field["foreach_schema"], foreach_map)
-            elif field["type"] == "value":
-                element.text = str(self.get_value(obj, field["value"], foreach_map))
-            elif field["type"] == "render":
+                    self.render_with_schema(element, obj, top, param["foreach_schema"], foreach_map)
+            elif param["type"] == "value":
+                element.text = str(self.get_value(obj, param["value"], foreach_map))
+            elif param["type"] == "render":
                 child_container = element
-                if "containing_tag" in field and field["containing_tag"] is not None:
-                    child_container = ET.SubElement(element, field["containing_tag"])
-                object_to_render = self.get_value(obj, field["value"], foreach_map)
+                if "containing_tag" in param and param["containing_tag"] is not None:
+                    child_container = ET.SubElement(element, param["containing_tag"])
+                object_to_render = self.get_value(obj, param["value"], foreach_map)
                 self.render_with_top(child_container, object_to_render, top)
 
         return element

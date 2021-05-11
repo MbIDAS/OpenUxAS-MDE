@@ -29,11 +29,11 @@ class UxasParser:
     def simplify_ast(self, node):
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
             struct_value = {"type": node.type, "struct_type": node.struct_type}
-            for field in node.fields:
-                if field.fieldValue is not None:
-                    struct_value[field.tag] = self.simplify_ast(field.fieldValue.value)
-                elif field.include is not None:
-                    simplified = self.simplify_ast(field.include)
+            for param in node.params:
+                if param.paramValue is not None:
+                    struct_value[param.tag] = self.simplify_ast(param.paramValue.value)
+                elif param.include is not None:
+                    simplified = self.simplify_ast(param.include)
                     for simp in simplified:
                         for k, v in simp.items():
                             struct_value[k] = v

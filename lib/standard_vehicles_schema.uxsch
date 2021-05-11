@@ -80,10 +80,10 @@ CameraConfiguration {
             tag: "WavelengthBand"
             value: _
         }
-        child FieldOfViewMode: FieldOfViewMode
-        child MinHorizontalFieldOfView: MinHorizontalFieldOfView
-        child MaxHorizontalFieldOfView: MaxHorizontalFieldOfView
-        children DiscreteHorizontalFieldOfViewList tag DiscreteHorizontalFieldOfViewList {
+        child ParamOfViewMode: ParamOfViewMode
+        child MinHorizontalParamOfView: MinHorizontalParamOfView
+        child MaxHorizontalParamOfView: MaxHorizontalParamOfView
+        children DiscreteHorizontalParamOfViewList tag DiscreteHorizontalParamOfViewList {
             tag: "real32"
             value: _
         }
@@ -161,7 +161,7 @@ CameraState {
     xml {
         tag: "CameraState"
         attr Series: Series
-        child HorizontalFieldOfView: HorizontalFieldOfView
+        child HorizontalParamOfView: HorizontalParamOfView
         child Footprint: Footprint
         child PayloadID: PayloadID
     }

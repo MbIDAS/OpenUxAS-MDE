@@ -1,6 +1,6 @@
 
 uxas {
-    fields {
+    params {
         FormatVersion { type: float, required: true }
         EntityID { type: integer, required: true }
         EntityType { type: string, required: true }

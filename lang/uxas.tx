@@ -7,9 +7,9 @@ Comment:
     /\/\*.*\*\//
     ;
 
-Field:
-    tag=ID ':' fieldValue=FieldValue
-    | tag=STRING ':' fieldValue=FieldValue
+Param:
+    tag=ID ':' paramValue=ParamValue
+    | tag=STRING ':' paramValue=ParamValue
     | include=Include
     | override=OverrideStruct
     | remove=RemoveStruct
@@ -19,22 +19,22 @@ OptComma:
     ','?
     ;
 
-FieldValue:
+ParamValue:
     value=Include OptComma | value=OverrideStruct OptComma | value=RemoveStruct OptComma | value=StructValue OptComma |
     value=NUMBER OptComma | value=ForeachValue OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
     ;
 
 ForeachValue:
-    foreach=ID '.' field=ID
+    foreach=ID '.' param=ID
     ;
 
 ArrayValue:
-    '[' values*=FieldValue ']'
+    '[' values*=ParamValue ']'
     ;
 
 StructValue:
     struct_type=ID type=ID? '{'
-        fields*=Field
+        params*=Param
     '}'
     ;
 
@@ -48,7 +48,7 @@ IncludeRef:
 
 OverrideStruct:
     "override" type=ID '{'
-        fields*=Field
+        params*=Param
     '}'
     ;
 

@@ -9,68 +9,68 @@ Comment:
 
 SchemaDef:
     struct_type=ID type=ID? '{'
-        fields=FieldsDef?
+        params=ParamsDef?
         xml=XMLDef?
     '}'
     ;
 
-FieldsDef:
-    "fields" "{"
-        fieldDefs *= FieldDef
+ParamsDef:
+    "params" "{"
+        paramDefs *= ParamDef
     "}"
     ;
 
-FieldDef:
-    fieldName=ID "{" fieldAttrs *= FieldDefAttr "}"
+ParamDef:
+    paramName=ID "{" paramAttrs *= ParamDefAttr "}"
     ;
 
-FieldDefAttr:
-    attrType="type" ":" type=FieldType ","?|
+ParamDefAttr:
+    attrType="type" ":" type=ParamType ","?|
     attrType="required" ":" required=BOOL ","?|
-    attrType="values" ":" "[" values *= FieldDefValue "]" ","?
+    attrType="values" ":" "[" values *= ParamDefValue "]" ","?
     ;
 
-FieldType:
-    type_name="struct" "{" fieldDefs *= FieldDef "}" is_array="[]"? |
+ParamType:
+    type_name="struct" "{" paramDefs *= ParamDef "}" is_array="[]"? |
     type_name="struct" struct_name=ID? struct_type=ID? is_array="[]"? |
     type_name=ID is_array="[]"?
     ;
 
-FieldDefValue:
-    fieldDefValue=ID ","?
+ParamDefValue:
+    paramDefValue=ID ","?
     ;
 
 XMLDef:
     "xml" "{"
-        fields *= Field
+        params *= Param
     "}"
     ;
 
-Field:
-    field=TagField |
-    field=AttrField |
-    field=ChildField |
-    field=ChildrenField |
-    field=ForeachField |
-    field=ValueField |
-    field=RenderField
+Param:
+    param=TagParam |
+    param=AttrParam |
+    param=ChildParam |
+    param=ChildrenParam |
+    param=ForeachParam |
+    param=ValueParam |
+    param=RenderParam
     ;
 
-TagField:
+TagParam:
     "tag" ":" tag_value=ValueSpec
     ;
 
-AttrField:
+AttrParam:
     "attr" attr_type=STRING ":" attr_value=ValueSpec |
     "attr" attr_type=ID ":" attr_value=ValueSpec
     ;
 
-ChildrenField:
+ChildrenParam:
     "children" children_source=ID containing_tag=ContainingTag? "{"
-        children*=Field
+        children*=Param
     "}" |
     "children" children_source=ID containing_tag=ContainingTag?"{"
-        children*=Field
+        children*=Param
     "}"
     ;
 
@@ -79,22 +79,22 @@ ContainingTag:
     "tag" containing_tag=STRING
     ;
 
-ChildField:
+ChildParam:
     "child" tag_name=ID ":" child_value=ValueSpec |
     "child" tag_name=STRING ":" child_value=ValueSpec
     ;
 
-ForeachField:
+ForeachParam:
     "foreach" foreach*=ID "{"
-        foreach_fields*=Field
+        foreach_params*=Param
     "}"
     ;
 
-ValueField:
+ValueParam:
     "value" ":" value=ValueSpec
     ;
 
-RenderField:
+RenderParam:
     "render" containing_tag=ContainingTag? ":" value=ValueSpec
     ;
 
