@@ -10,6 +10,7 @@ Comment:
 SchemaDef:
     struct_type=ID type=ID? '{'
         params=ParamsDef?
+        messages=MessagesDef?
         xml=XMLDef?
     '}'
     ;
@@ -38,6 +39,30 @@ ParamType:
 
 ParamDefValue:
     paramDefValue=ID ","?
+    ;
+
+MessagesDef:
+    "messages" "{"
+        receives_messages = ReceivesMessages?
+        ","?
+        sends_messages = SendsMessages?
+    "}"
+    ;
+
+SendsMessages:
+    "sends" ":" "[" sends_messages *= MessageInList "]"
+    ;
+
+ReceivesMessages:
+    "receives" ":" "[" receives_messages *= MessageInList "]"
+    ;
+
+MessageInList:
+    prefix *= MessagePrefix message=ID ","?
+    ;
+
+MessagePrefix: ID "::" |
+    ID "."
     ;
 
 XMLDef:

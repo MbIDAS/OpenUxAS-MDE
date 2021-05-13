@@ -16,18 +16,34 @@ class UxasSchemaParser:
         if textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["SchemaDef"]):
             xml_params = []
             type_params = []
+            messages = {"receives": [], "sends": []}
             if node.params:
                 for f in node.params.paramDefs:
                     type_params.append(self.simplify_ast(f))
+            if node.messages:
+                messages = self.simplify_ast(node.messages)
+
             if node.xml:
                 xml_params = self.simplify_ast(node.xml)
-            s = {"type": node.type, "struct_type": node.struct_type, "params": type_params, "xml": xml_params}
+
+            s = {"type": node.type, "struct_type": node.struct_type, "params": type_params, "xml": xml_params,
+                 "messages": messages}
             return s
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["XMLDef"]):
             params = []
             for param in node.params:
                 params.append(self.simplify_ast(param))
             return params
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["MessagesDef"]):
+            receives_messages = []
+            if node.receives_messages:
+                receives_messages = ["".join(x.prefix)+x.message for x in node.receives_messages.receives_messages]
+
+            sends_messages = []
+            if node.sends_messages:
+                sends_messages = ["".join(x.prefix)+x.message for x in node.sends_messages.sends_messages]
+            return {"receives": receives_messages, "sends": sends_messages}
+
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamsDef"]):
             param_defs = []
             for param_def in node.paramDefs:
