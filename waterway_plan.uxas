@@ -18,14 +18,14 @@ plan {
             TaskID: 1000
         }
     ]
-    Entities: [ 400 500 ]
+    Entities: [ @vehicles[vehicle1].ID @vehicles[vehicle2].ID ]
     Schedule: [
         AutomationRequest {
             Series: CMASI
             ID: 1001
             Label: "PISR_FromGoogleEarth"
             TaskList: [ 1000 ]
-            EntityList: [ 400, 500 ]
+            EntityList: [ @vehicles[vehicle1].ID, @vehicles[vehicle2].ID ]
             StartDelay: 5000
         }
     ]
@@ -35,7 +35,7 @@ plan {
             Series: CMASI
             Time: 1.8
             CommandID: 100
-            VehicleID: 400
+            VehicleID: @vehicles[vehicle1].ID
             WaypointList: [
                 Waypoint {
                     Series: CMASI
@@ -79,13 +79,13 @@ plan {
             Series: CMASI
             Time: 1.9
             CommandID: 100
-            VehicleID: 500
+            VehicleID: @vehicles[vehicle2].ID
             WaypointList: [
                 Waypoint {
                     Series: CMASI
                     Number: 1
                     NextWaypoint: 1
-                    Speed: 22.1211109161377
+                    Speed: @vehicles[vehicle2].NominalSpeed
                     SpeedType: Airspeed
                     ClimbRate: 0
                     TurnType: TurnShort

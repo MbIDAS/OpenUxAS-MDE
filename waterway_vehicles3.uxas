@@ -1,9 +1,9 @@
         vehicle vehicle1 {
-            ID: 400
-            Label: UAV_400
+            ID: 1000
+            Label: UAV_1000
             include UAV1 @ "standard_vehicles.uxas"
             state: vehicle_state {
-                ID: 400
+                ID: 1000
                 include UAV1_state @ "standard_vehicles.uxas"
                 Location: location3d {
                     Series: CMASI
@@ -15,11 +15,11 @@
             }
         }
         vehicle vehicle2 {
-            ID: 500
-            Label: UAV_500
+            ID: 2000
+            Label: UAV_2000
             include UAV1 @ "standard_vehicles.uxas"
             state: vehicle_state {
-                ID: 500
+                ID: 2000
                 include UAV1_state @ "standard_vehicles.uxas"
                 Location: location3d {
                     Series: CMASI

@@ -36,7 +36,8 @@ class UxasParser:
                     simplified = self.simplify_ast(param.include)
                     for simp in simplified:
                         for k, v in simp.items():
-                            struct_value[k] = v
+                            if k not in struct_value or (v != "" and struct_value[k] == ""):
+                                struct_value[k] = v
 
             if struct_value["struct_type"] not in self.config_types:
                 self.config_types[struct_value["struct_type"]] = [struct_value]
@@ -66,6 +67,8 @@ class UxasParser:
                 else:
                     vals = vals + simplified
             return vals
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["ReferenceValue"]):
+            return {"category": node.category, "name": node.name, "param": node.param}
         else:
             return node
 

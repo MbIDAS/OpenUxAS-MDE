@@ -17,10 +17,10 @@
         vehicle vehicle2 {
             ID: 500
             Label: UAV_500
-            include UAV1 @ "standard_vehicles.uxas"
+            include UAP1 @ "standard_vehicles.uxas"
             state: vehicle_state {
                 ID: 500
-                include UAV1_state @ "standard_vehicles.uxas"
+                include UAP1_state @ "standard_vehicles.uxas"
                 Location: location3d {
                     Series: CMASI
                     Altitude: 700

@@ -21,11 +21,15 @@ OptComma:
 
 ParamValue:
     value=Include OptComma | value=OverrideStruct OptComma | value=RemoveStruct OptComma | value=StructValue OptComma |
-    value=NUMBER OptComma | value=ForeachValue OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
+    value=NUMBER OptComma | value=ReferenceValue OptComma | value=ForeachValue OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
     ;
 
 ForeachValue:
     foreach=ID '.' param=ID
+    ;
+
+ReferenceValue:
+    '@' category=ID '[' name=ID ']' '.' param=ID
     ;
 
 ArrayValue:
