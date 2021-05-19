@@ -70,6 +70,7 @@ FlightProfile {
         child PitchAngle: PitchAngle
         child VerticalSpeed: VerticalSpeed
         child MaxBankAngle: MaxBankAngle
+        child EnergyRate: EnergyRate
     }
 }
 
@@ -110,10 +111,10 @@ CameraConfiguration {
             tag: "WavelengthBand"
             value: _
         }
-        child ParamOfViewMode: ParamOfViewMode
-        child MinHorizontalParamOfView: MinHorizontalParamOfView
-        child MaxHorizontalParamOfView: MaxHorizontalParamOfView
-        children DiscreteHorizontalParamOfViewList tag DiscreteHorizontalParamOfViewList {
+        child FieldOfViewMode: FieldOfViewMode
+        child MinHorizontalFieldOfView: MinHorizontalFieldOfView
+        child MaxHorizontalFieldOfView: MaxHorizontalFieldOfView
+        children DiscreteHorizontalFieldOfViewList tag DiscreteHorizontalFieldOfViewList {
             tag: "real32"
             value: _
         }
@@ -191,8 +192,64 @@ CameraState {
     xml {
         tag: "CameraState"
         attr Series: Series
-        child HorizontalParamOfView: HorizontalParamOfView
+        child HorizontalFieldOfView: HorizontalFieldOfView
         child Footprint: Footprint
         child PayloadID: PayloadID
+    }
+}
+
+MissionCommand {
+    xml {
+        tag: "MissionCommand"
+        attr Series: Series
+        attr Time: Time
+        child CommandID: CommandID
+        child VehicleID: VehicleID
+        children WaypointList tag "WaypointList" {
+            render: _
+        }
+        child FirstWaypoint: FirstWaypoint
+        child Status: Status
+    }
+}
+
+Waypoint {
+    xml {
+        tag: "Waypoint"
+        attr Series: Series
+        child Number: Number
+        child NextWaypoint: NextWaypoint
+        child Speed: Speed
+        child SpeedType: SpeedType
+        child ClimbRate: ClimbRate
+        child TurnType: TurnType
+        children VehicleActionList tag "VehicleActionList" {
+            render: _
+        }
+        child ContingencyWaypoint: ContingencyWaypoint
+        children AssociatedTasks tag "AssociatedTasks" {
+            render: _
+        }
+        child Altitude: Altitude
+        child AltitudeType: AltitudeType
+        child Latitude: Latitude
+        child Longitude: Longitude
+    }
+}
+
+LoiterAction {
+    xml {
+        tag: "LoiterAction"
+        child LoiterType: LoiterType
+        child Radius: Radius
+        child Axis: Axis
+        child Length: Length
+        child Direction: Direction
+        child Duration: Duration
+        child Airspeed: Airspeed
+        render tag "Location": Location
+        children AssociatedTaskList tag "AssociatedTaskList" {
+            render: _
+        }
     }
 }

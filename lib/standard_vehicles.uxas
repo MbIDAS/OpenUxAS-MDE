@@ -38,10 +38,10 @@ vehicle UAV1 {
         CameraConfiguration {
             Series: CMASI
             SupportedWavelengthBands: [ "AllAny" ]
-            ParamOfViewMode: Discrete
-            MinHorizontalParamOfView: 0.11
-            MaxHorizontalParamOfView: 45.0
-            DiscreteHorizontalParamOfViewList: [
+            FieldOfViewMode: Discrete
+            MinHorizontalFieldOfView: 0.11
+            MaxHorizontalFieldOfView: 45.0
+            DiscreteHorizontalFieldOfViewList: [
                 45.0 22.0 7.6 3.7 0.63 0.11 ]
             VideoStreamHorizontalResolution: 1024
             VideoStreamVerticalResolution: 768
@@ -98,7 +98,7 @@ vehicle_state UAV1_state {
         }
         CameraState {
             Series: CMASI
-            HorizontalParamOfView: 45.0
+            HorizontalFieldOfView: 45.0
             Footprint: ""
             PayloadID: 10001
             PayloadKind: ""

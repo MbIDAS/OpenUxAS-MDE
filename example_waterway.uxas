@@ -6,7 +6,6 @@ uxas {
     FormatVersion: "1.0"
     EntityID: 100
     EntityType: Aircraft
-    Foobar: "foo/*lalala"
 
     networks: [
         include "bridge_amase_standard.uxas"
@@ -26,6 +25,13 @@ uxas {
             state: vehicle_state {
                 ID: 400
                 include UAV1_state @ "standard_vehicles.uxas"
+                Location: location3d {
+                    Series: CMASI
+                    Altitude: 700
+                    AltitudeType: MSL
+                    Latitude: 45.3171
+                    Longitude: -120.9923
+                }
             }
         }
         vehicle {
@@ -35,6 +41,13 @@ uxas {
             state: vehicle_state {
                 ID: 500
                 include UAV1_state @ "standard_vehicles.uxas"
+                Location: location3d {
+                    Series: CMASI
+                    Altitude: 700
+                    AltitudeType: MSL
+                    Latitude: 45.3133
+                    Longitude: -120.9402
+                }
             }
         }
     ]

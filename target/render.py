@@ -107,7 +107,9 @@ class UxasXMLRenderer:
             if param["type"] == "attr":
                 element.attrib[param["attr_type"]] = str(self.get_value(obj, param["attr_value"], foreach_map))
             elif param["type"] == "children":
-                children = obj[param["children_source"]]
+                children = []
+                if param["children_source"] in obj:
+                    children = obj[param["children_source"]]
                 child_container = element
                 if "containing_tag" in param and param["containing_tag"] is not None:
                     child_container = ET.SubElement(element, param["containing_tag"])

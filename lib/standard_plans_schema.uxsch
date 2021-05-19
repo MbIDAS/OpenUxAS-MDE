@@ -63,3 +63,58 @@ AutomationRequest {
         }
     }
 }
+
+MissionCommand {
+    xml {
+        tag: "MissionCommand"
+        attr Series: Series
+        attr Time: Time
+        child CommandID: CommandID
+        child VehicleID: VehicleID
+        children WaypointList tag "WaypointList" {
+            render: _
+        }
+        child FirstWaypoint: FirstWaypoint
+        child Status: Status
+    }
+}
+
+Waypoint {
+    xml {
+        tag: "Waypoint"
+        attr Series: Series
+        child Number: Number
+        child NextWaypoint: NextWaypoint
+        child Speed: Speed
+        child SpeedType: SpeedType
+        child ClimbRate: ClimbRate
+        child TurnType: TurnType
+        children VehicleActionList tag "VehicleActionList" {
+            render: _
+        }
+        child ContingencyWaypoint: ContingencyWaypoint
+        children AssociatedTasks tag "AssociatedTasks" {
+            render: _
+        }
+        child Altitude: Altitude
+        child AltitudeType: AltitudeType
+        child Latitude: Latitude
+        child Longitude: Longitude
+    }
+}
+
+LoiterAction {
+    xml {
+        child LoiterType: LoiterType
+        child Radius: Radius
+        child Axis: Axis
+        child Length: Length
+        child Direction: Direction
+        child Duration: Duration
+        child Airspeed: Airspeed
+        render tag "Location": Location
+        children AssociatedTaskList tag "AssociatedTaskList" {
+            render: _
+        }
+    }
+}

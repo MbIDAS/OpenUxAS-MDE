@@ -44,6 +44,28 @@ service Test_SimulationTime {
 }
 
 service TaskManagerService {
+    messages {
+        receives: [
+            afrl.cmasi.RemoveTasks,
+            afrl.cmasi.EntityState,
+            afrl.cmasi.EntityConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.cmasi.MissionCommand,
+            afrl.cmasi.AutomationResponse,
+            afrl.cmasi.FollowPathCommand
+        ]
+        sends: [
+            uxas.messages.uxnative.KillService,
+            uxas.messages.uxnative.CreateNewService,
+            afrl.cmasi.AutomationRequest,
+            uxas.messages.task.UniqueAutomationRequest
+        ]
+    }
     xml {
         tag: "Service"
         attr Type: "TaskManagerService"
@@ -307,6 +329,9 @@ service WaypointPlanManagerService {
             afrl.cmasi.AutomationResponse,
             afrl.cmasi.AirVehicleState,
             uxas.messages.uxnative.IncrementWaypoint,
+            afrl.cmasi.MissionCommand
+        ]
+        sends: [
             afrl.cmasi.MissionCommand
         ]
     }

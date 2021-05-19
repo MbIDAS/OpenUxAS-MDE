@@ -37,9 +37,13 @@ def write_elementtree(elem, filename):
 
 system_lib_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lib")
 
+default_output_dir = os.curdir
+if os.environ.get("UXAS_EXAMPLES_DIR") is not None:
+    default_output_dir = os.environ.get("UXAS_EXAMPLES_DIR")
+
 arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
-arg_parser.add_argument('-libpath', nargs=1, default="")
-arg_parser.add_argument('-o', nargs=1, default=os.curdir)
+arg_parser.add_argument('-libpath', nargs=1, default=[""])
+arg_parser.add_argument('-o', nargs=1, default=[default_output_dir])
 
 parsed_args, rest_args = arg_parser.parse_known_args()
 parsed_args = vars(parsed_args)
@@ -75,6 +79,7 @@ amase_schema_parser = load_amase_schemas(lib_path)
 amase_renderer = UxasXMLRenderer(amase_schema_parser.schemas)
 
 messages = []
+output_dir = os.path.join(output_dir, uxas_parser.configs[0]["Name"])
 os.makedirs(os.path.join(output_dir, "MessagesToSend", "tasks"), 0o777, exist_ok=True)
 
 scen_veh_list = []
@@ -103,7 +108,7 @@ amase_config = {
     "struct_type": "amase",
     "type": "",
     "ScenarioData": uxas_plan_parser.configs[0]["ScenarioData"],
-    "ScenarioEventList": scen_veh_list + scen_veh_state_list
+    "ScenarioEventList": scen_veh_list + scen_veh_state_list + uxas_plan_parser.configs[0]["MissionCommands"]
 }
 
 for task in uxas_plan_parser.configs[0]["Tasks"]:
