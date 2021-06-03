@@ -28,8 +28,17 @@ ForeachValue:
     foreach=ID '.' param=ID
     ;
 
+ReferenceTarget:
+    category=ID '[' name=ID ']' |
+    category=ID
+    ;
+
 ReferenceValue:
-    '@' category=ID '[' name=ID ']' '.' param=ID
+    '@' reference=ReferenceTarget param_list*=ReferencePathElement
+    ;
+
+ReferencePathElement:
+    '.' param=ID
     ;
 
 ArrayValue:
@@ -37,9 +46,17 @@ ArrayValue:
     ;
 
 StructValue:
-    struct_type=ID type=ID? '{'
+    struct_type=ID type=ID? variable_definitions=StructVariableDefinitions? '{'
         params*=Param
     '}'
+    ;
+
+StructVariableDefinitions:
+    '[' variable_definition *= StructVariableDefinition ']'
+    ;
+
+StructVariableDefinition:
+    variable_name=ID '=' reference=ReferenceValue OptComma
     ;
 
 Include:

@@ -1,7 +1,7 @@
 from lang.parser import UxasParser
 from lang.schema import UxasSchemaParser
 from lang.type_checker import TypeChecker
-from target.render import UxasXMLRenderer
+from target.render import (UxasXMLRenderer, Environment)
 import xml.etree.ElementTree as ET
 import os
 import sys
@@ -94,7 +94,9 @@ for vehicle_id in uxas_plan_parser.configs[0]["Entities"]:
                 item = c
                 break
         if item is not None:
-            vehicle_id = item[vehicle_id["param"]]
+            for param in vehicle_id["param_list"]:
+                item = item[param]
+            vehicle_id = item
 
     for vehicle in uxas_parser.configs[0]["vehicles"]:
         if vehicle["ID"] != vehicle_id:
@@ -122,14 +124,14 @@ amase_config = {
 }
 
 for task in uxas_plan_parser.configs[0]["Tasks"]:
-    task_xml = renderer.render_with_top(None, task, uxas_parser.configs[0])
+    task_xml = renderer.render_with_env(None, task, Environment(uxas_parser.configs[0]))
     tree = ET.ElementTree(task_xml)
     filename = "tasks/"+str(task["TaskID"])+"_"+task["Label"]+".xml"
     messages.append({"MessageFileName": filename, "SendTime_ms": 300})
     write_elementtree(task_xml, os.path.join(output_dir, "MessagesToSend", filename))
 
 for sched in uxas_plan_parser.configs[0]["Schedule"]:
-    sched_xml = renderer.render_with_top(None, sched, uxas_parser.configs[0])
+    sched_xml = renderer.render_with_env(None, sched, Environment(uxas_parser.configs[0]))
     tree = ET.ElementTree(sched_xml)
     filename = "tasks/"+str(sched["ID"])+"_AutomationRequest_"+sched["Label"]+".xml"
     messages.append({"struct_type": "message", "type": "SendMessagesServiceMessage",
@@ -147,7 +149,7 @@ config = renderer.render(None, uxas_parser.configs[0])
 config_filename = "cfg_"+uxas_parser.configs[0]["Name"]+".xml"
 write_elementtree(config, os.path.join(output_dir, config_filename))
 
-amase_xml = amase_renderer.render_with_top(None, amase_config, uxas_parser.configs[0])
+amase_xml = amase_renderer.render_with_env(None, amase_config, Environment(uxas_parser.configs[0]))
 scenario_filename = "Scenario_"+uxas_parser.configs[0]["Name"]+".xml"
 write_elementtree(amase_xml, os.path.join(output_dir, scenario_filename))
 

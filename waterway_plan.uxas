@@ -31,17 +31,17 @@ plan {
     ]
 
     MissionCommands: [
-        MissionCommand {
+        MissionCommand [vehicle=@vehicles] {
             Series: CMASI
             Time: 1.8
             CommandID: 100
-            VehicleID: @vehicles[vehicle1].ID
+            VehicleID: @vehicle.ID
             WaypointList: [
                 Waypoint {
                     Series: CMASI
                     Number: 1
                     NextWaypoint: 1
-                    Speed: 22.1211109161377
+                    Speed: @vehicle.state.Airspeed
                     SpeedType: Airspeed
                     ClimbRate: 0
                     TurnType: TurnShort
@@ -54,65 +54,15 @@ plan {
                             Length: 0
                             Direction: VehicleDefault
                             Duration: 0
-                            Airspeed: 22.1211109161377
-                            Location: location3d {
-                                Series: CMASI
-                                Altitude: 700
-                                AltitudeType: MSL
-                                Latitude: 45.3171
-                                Longitude: -120.9923
-                            }
+                            Airspeed: @vehicle.state.Airspeed
+                            Location: @vehicle.state.Location
                         }
                     ]
                     ContingencyWaypoint: 0
-                    Altitude: 700
-                    AltitudeType: MSL
-                    Latitude: 45.3171
-                    Longitude: -120.9923
-                }
-            ]
-            FirstWaypoint: 1
-            Status: Pending
-        },
-
-        MissionCommand {
-            Series: CMASI
-            Time: 1.9
-            CommandID: 100
-            VehicleID: @vehicles[vehicle2].ID
-            WaypointList: [
-                Waypoint {
-                    Series: CMASI
-                    Number: 1
-                    NextWaypoint: 1
-                    Speed: @vehicles[vehicle2].NominalSpeed
-                    SpeedType: Airspeed
-                    ClimbRate: 0
-                    TurnType: TurnShort
-                    VehicleActionList: [
-                        LoiterAction {
-                            Series: CMASI
-                            LoiterType: VehicleDefault
-                            Radius: 100
-                            Axis: 0
-                            Length: 0
-                            Direction: VehicleDefault
-                            Duration: 0
-                            Airspeed: 22.1211109161377
-                            Location: location3d {
-                                Series: CMASI
-                                Altitude: 1000
-                                AltitudeType: MSL
-                                Latitude: 45.3133
-                                Longitude: -120.9402
-                            }
-                        }
-                    ]
-                    ContingencyWaypoint: 0
-                    Altitude: 1000
-                    AltitudeType: MSL
-                    Latitude: 45.3122
-                    Longitude: -120.9402
+                    Altitude: @vehicle.state.Location.Altitude
+                    AltitudeType: @vehicle.state.Location.AltitudeType
+                    Latitude: @vehicle.state.Location.Latitude
+                    Longitude: @vehicle.state.Location.Longitude
                 }
             ]
             FirstWaypoint: 1

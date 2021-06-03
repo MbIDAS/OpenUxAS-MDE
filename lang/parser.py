@@ -38,7 +38,12 @@ class UxasParser:
                         for k, v in simp.items():
                             if k not in struct_value or (v != "" and struct_value[k] == ""):
                                 struct_value[k] = v
-
+            if node.variable_definitions is not None:
+                variable_definitions = []
+                for var_def in node.variable_definitions.variable_definition:
+                    variable_definitions.append({"variable": var_def.variable_name,
+                                                 "reference": self.simplify_ast(var_def.reference)})
+                struct_value["variable_definitions"] = variable_definitions
             if struct_value["struct_type"] not in self.config_types:
                 self.config_types[struct_value["struct_type"]] = [struct_value]
             else:
@@ -68,7 +73,13 @@ class UxasParser:
                     vals = vals + simplified
             return vals
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["ReferenceValue"]):
-            return {"category": node.category, "name": node.name, "param": node.param}
+            param_list = []
+            for param in node.param_list:
+                param_list.append(param.param)
+            if node.reference.name is not None:
+                return {"category": node.reference.category, "name": node.reference.name, "param_list": param_list}
+            else:
+                return {"category": node.reference.category, "param_list": param_list}
         else:
             return node
 
