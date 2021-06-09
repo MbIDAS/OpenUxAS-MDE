@@ -68,11 +68,11 @@ IncludeRef:
     ;
 
 OverrideStruct:
-    "override" type=ID '{'
+    "override" struct_type=ID type=ID variable_definitions=StructVariableDefinitions? '{'
         params*=Param
     '}'
     ;
 
 RemoveStruct:
-    "remove" type=ID
+    "remove" struct_type=ID type=ID
     ;

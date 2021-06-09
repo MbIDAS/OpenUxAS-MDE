@@ -27,8 +27,11 @@ class UxasParser:
         self.lib_dir = lib_path
 
     def simplify_ast(self, node):
-        if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]):
-            struct_value = {"type": node.type, "struct_type": node.struct_type}
+        if textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["StructValue"]) or \
+           textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["OverrideStruct"]):
+            struct_value = {"type": node.type, "struct_type": node.struct_type,
+                            "_is_override": textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["OverrideStruct"])
+            }
             for param in node.params:
                 if param.paramValue is not None:
                     struct_value[param.tag] = self.simplify_ast(param.paramValue.value)
@@ -50,6 +53,11 @@ class UxasParser:
                 self.config_types[struct_value["struct_type"]].append(struct_value)
 
             return struct_value
+
+
+        elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["RemoveStruct"]):
+            struct_value = {"is_remove": True, "struct_type": node.struct_type, "type": node.type}
+            return struct_value
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["Include"]):
             cfgs = []
             included_cfg = []
@@ -61,6 +69,7 @@ class UxasParser:
                     if cfg.type == node.include_ref.item_ref:
                         cfgs.append(self.simplify_ast(cfg))
                 else:
+                    simplified = self.simplify_ast(cfg)
                     cfgs.append(self.simplify_ast(cfg))
             return cfgs
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas"]["ArrayValue"]):
@@ -68,7 +77,30 @@ class UxasParser:
             for v in node.values:
                 simplified = self.simplify_ast(v.value)
                 if not isinstance(simplified, list):
-                    vals.append(simplified)
+                    if isinstance(simplified, dict):
+                        if "_is_override" in simplified and simplified["_is_override"]:
+                            for i in range(0, len(vals)):
+                                curr_val = vals[i]
+                                if "struct_type" in curr_val:
+                                    if curr_val["struct_type"] == simplified["struct_type"] and \
+                                       curr_val["type"] == simplified["type"]:
+                                        for param in simplified.keys():
+                                            if param == "type" or param == "struct_type" or param == "_is_override":
+                                                continue
+                                            curr_val[param] = simplified[param]
+                                        break
+                        elif "is_remove" in simplified:
+                            for i in range(0, len(vals)):
+                                curr_val = vals[i]
+                                if "struct_type" in curr_val:
+                                    if curr_val["struct_type"] == simplified["struct_type"] and \
+                                            curr_val["type"] == simplified["type"]:
+                                        vals = vals[:i]+vals[i+1:]
+                                        break
+                        else:
+                            vals.append(simplified)
+                    else:
+                        vals.append(simplified)
                 else:
                     vals = vals + simplified
             return vals
@@ -87,35 +119,6 @@ class UxasParser:
         for cfg in self.config.config:
             simplified = self.simplify_ast(cfg)
             self.configs.append(simplified)
-
-        for cfglist in self.config_types.values():
-            for cfg in cfglist:
-                continue
-                if len(cfg["foreach"]) == 0:
-                    continue
-
-                all_foreach = []
-
-                for f in cfg["foreach"]:
-                    if f not in cfg:
-                        print("Warning: No items named "+f+" available for foreach in "+
-                              cfg["struct_type"]+" "+cfg["type"])
-                        continue
-
-                    flist = cfg[f]
-                    if len(all_foreach) == 0:
-                        for fitem in flist:
-                            all_foreach.append({f: fitem})
-                    else:
-                        new_all = []
-                        for fitem in flist:
-                            for allitem in all_foreach:
-                                c = allitem.copy()
-                                c[f] = fitem
-                                new_all.append(c)
-                        all_foreach = new_all
-
-                cfg["foreach"] = all_foreach
 
     def load_config_from_file(self, filename):
         self.config = uxas_meta.model_from_file(filename)
