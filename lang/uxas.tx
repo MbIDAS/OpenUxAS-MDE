@@ -64,7 +64,7 @@ Include:
     ;
 
 IncludeRef:
-    item_ref=ID '@'
+    item_ref=ID variable_definitions=StructVariableDefinitions? '@'
     ;
 
 OverrideStruct:
