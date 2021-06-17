@@ -562,3 +562,10 @@ replaced with the mechanism for doing the repetition from the .uxas
 file instead. This will give you better control in case you don't want
 to generate a `WaypointPlanManagerService` for every vehicle, or if you want
 to generate different configurations for different vehicles.
+
+## Building a Setup File
+To create a file that can be installed with pip, from the root directory
+of the project do:
+```shell
+python -m build --wheel
+```
