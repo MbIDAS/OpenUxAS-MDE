@@ -9,9 +9,6 @@ uxas {
 
     networks: [
         include "bridge_amase_standard.uxas"
-        override network LmcpObjectNetworkTcpBridge {
-            TcpAddress: "tcp://127.0.0.1:5678"
-        }
     ]
 
     services: [

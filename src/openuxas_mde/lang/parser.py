@@ -2,9 +2,10 @@ from textx.metamodel import metamodel_from_file
 import textx.model
 import os.path
 import sys
+import pkg_resources
 from .util import get_filename_in_path
 
-lang_dir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "lang")
+lang_dir = pkg_resources.resource_filename("openuxas_mde", "lang")
 uxas_meta = metamodel_from_file(os.path.join(lang_dir, "uxas.tx"))
 
 class ParseError(Exception):

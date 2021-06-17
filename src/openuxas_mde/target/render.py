@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import collections
 
 class Environment:
     def __init__(self, dict, next_env=None):
