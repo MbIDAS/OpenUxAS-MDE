@@ -569,3 +569,8 @@ of the project do:
 ```shell
 python -m build --wheel
 ```
+The build will generate a .whl file in the `dist` directory that you can then
+install with:
+```shell
+pip install openuxas_mde-1.0.0-py2.py3-none-any.whl
+```
