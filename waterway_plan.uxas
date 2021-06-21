@@ -1,0 +1,73 @@
+
+plan {
+    ScenarioData: ScenarioData {
+        SimulationView: SimulationView {
+            LongExtent: 0.11
+            Latitude: 45.323
+            Longitude: -120.9645
+        }
+        ScenarioName: "Waterway Search Example"
+        Date: "4/15/2021:09:08:00"
+        ScenarioDuration: 785
+        TrackAgeOut: ""
+    }
+    Label: PISR_FromGoogleEarth
+    Tasks: [
+        task {
+            include "line_search_task.uxas"
+            TaskID: 1000
+        }
+    ]
+    Entities: [ @vehicles[vehicle1].ID @vehicles[vehicle2].ID ]
+    Schedule: [
+        AutomationRequest {
+            Series: CMASI
+            ID: 1001
+            Label: "PISR_FromGoogleEarth"
+            TaskList: [ 1000 ]
+            EntityList: [ @vehicles[vehicle1].ID, @vehicles[vehicle2].ID ]
+            StartDelay: 5000
+        }
+    ]
+
+    MissionCommands: [
+        MissionCommand [vehicle=@vehicles] {
+            Series: CMASI
+            Time: 1.8
+            CommandID: 100
+            VehicleID: @vehicle.ID
+            WaypointList: [
+                Waypoint {
+                    Series: CMASI
+                    Number: 1
+                    NextWaypoint: 1
+                    Speed: @vehicle.state.Airspeed
+                    SpeedType: Airspeed
+                    ClimbRate: 0
+                    TurnType: TurnShort
+                    VehicleActionList: [
+                        LoiterAction {
+                            Series: CMASI
+                            LoiterType: VehicleDefault
+                            Radius: 100
+                            Axis: 0
+                            Length: 0
+                            Direction: VehicleDefault
+                            Duration: 0
+                            Airspeed: @vehicle.state.Airspeed
+                            Location: @vehicle.state.Location
+                        }
+                    ]
+                    ContingencyWaypoint: 0
+                    Altitude: @vehicle.state.Location.Altitude
+                    AltitudeType: @vehicle.state.Location.AltitudeType
+                    Latitude: @vehicle.state.Location.Latitude
+                    Longitude: @vehicle.state.Location.Longitude
+                }
+            ]
+            FirstWaypoint: 1
+            Status: Pending
+        }
+    ]
+}
+

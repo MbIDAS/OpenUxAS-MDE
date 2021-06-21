@@ -1,0 +1,32 @@
+        vehicle vehicle1 {
+            ID: 1000
+            Label: UAV_1000
+            include UAV1 @ "standard_vehicles.uxas"
+            state: vehicle_state {
+                ID: 1000
+                include UAV1_state @ "standard_vehicles.uxas"
+                Location: location3d {
+                    Series: CMASI
+                    Altitude: 700
+                    AltitudeType: MSL
+                    Latitude: 45.3171
+                    Longitude: -120.9923
+                }
+            }
+        }
+        vehicle vehicle2 {
+            ID: 2000
+            Label: UAV_2000
+            include UAV1 @ "standard_vehicles.uxas"
+            state: vehicle_state {
+                ID: 2000
+                include UAV1_state @ "standard_vehicles.uxas"
+                Location: location3d {
+                    Series: CMASI
+                    Altitude: 700
+                    AltitudeType: MSL
+                    Latitude: 45.3133
+                    Longitude: -120.9402
+                }
+            }
+        }

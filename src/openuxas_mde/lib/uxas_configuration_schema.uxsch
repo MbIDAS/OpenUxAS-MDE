@@ -1,0 +1,25 @@
+
+uxas {
+    params {
+        FormatVersion { type: float, required: true }
+        EntityID { type: integer, required: true }
+        EntityType { type: string, required: true }
+        networks { type: struct network[], required: true }
+        services { type: struct service[], required: true }
+    }
+    xml {
+        tag: "UxAS"
+        attr FormatVersion: FormatVersion
+        attr EntityID: EntityID
+        attr EntityType: EntityType
+
+        children networks {
+            render: _
+        }
+
+        children services {
+            render: _
+        }
+    }
+}
+

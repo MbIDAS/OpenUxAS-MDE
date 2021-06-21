@@ -1,0 +1,156 @@
+
+service OperatingRegionStateService {
+    messages {
+        receives: [
+            afrl.cmasi.KeepInZone,
+            afrl.cmasi.KeepOutZone,
+            afrl.cmasi.RemoveZones,
+            afrl.impact.WaterZone ]
+        sends: [
+            afrl.cmasi.KeepInZone,
+            afrl.cmasi.KeepOutZone,
+            afrl.cmasi.OperatingRegion
+        ]
+    }
+}
+
+service LoiterLeash {
+    messages {
+        receives: [
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            afrl.impact.RadioTowerConfiguration,
+            uxas.messages.route.RoutePlanResponse,
+            uxas.messages.uxnative.SafeHeadingAction,
+        ]
+        sends: [
+            afrl.cmasi.VehicleActionCommand,
+            uxas.messages.route.RoutePlanRequest
+        ]
+    }
+}
+
+service SimpleWaypointPlanManagerService {
+    messages {
+        receives: [
+            afrl.cmasi.AutomationResponse,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            afrl.impact.RadioTowerConfiguration,
+        ]
+        sends: [
+            afrl.cmasi.MissionCommand
+        ]
+    }
+}
+
+service SteeringService {
+    messages {
+        receives: [
+            afrl.cmasi.AirVehicleConfiguration,
+            PartialAirVehicleState,
+            afrl.cmasi.AutomationResponse,
+            afrl.cmasi.MissionCommand,
+            uxas.messages.uxnative.SpeedOverrideAction,
+            afrl.cmasi.VehicleActionCommand,
+            uxas.messages.task.UniqueAutomationRequest,
+            uxas.messages.task.UniqueAutomationResponse
+        ]
+        sends: [
+            uxas.messages.uxnative.SafeHeadingAction,
+            afrl.cmasi.VehicleActionCommand,
+            afrl.cmasi.AirVehicleState
+        ]
+    }
+}
+
+service OsmPlannerService {
+    messages {
+        receives: [
+            uxas.messages.route.RoutePlanRequest,
+            GroundPathPlanner,
+            afrl.vehicles.GroundVehicleConfiguration,
+            uxas.messages.route.EgressRouteRequest,
+            uxas.messages.route.RoadPointsRequest
+        ]
+        sends: [
+            uxas.messages.route.RoutePlanResponse,
+            uxas.messages.route.RoadPointsResponse,
+            uxas.messages.route.EgressRouteResponse
+        ]
+    }
+}
+
+service RoutePlannerService {
+    messages {
+        receives: [
+            afrl.cmasi.KeepInZone,
+            afrl.cmasi.KeepOutZone,
+            afrl.impact.WaterZone,
+            afrl.cmasi.OperatingRegion,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            uxas.messages.route.RoutePlanRequest,
+            AircraftPathPlanner
+        ]
+        sends: [
+            uxas.messages.route.RoutePlanResponse,
+        ]
+    }
+}
+
+service BatchSummaryService {
+    messages {
+        receives: [
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.KeepOutZone,
+            afrl.impact.BatchSummaryRequest,
+            messages.task.TaskAutomationResponse
+        ]
+        sends: [
+            afrl.impact.BatchSummaryRequest,
+            messages.task.TaskAutomationRequest
+        ]
+    }
+}

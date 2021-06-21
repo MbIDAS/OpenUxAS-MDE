@@ -1,0 +1,3 @@
+[console_scripts]
+openuxas_mde = openuxas_mde:main.main
+

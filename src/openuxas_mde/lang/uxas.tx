@@ -1,0 +1,78 @@
+UxASConfig:
+    config*=StructValue
+    ;
+
+Comment:
+    /\/\/.*$/ |
+    /\/\*.*\*\//
+    ;
+
+Param:
+    tag=ID ':' paramValue=ParamValue
+    | tag=STRING ':' paramValue=ParamValue
+    | include=Include
+    | override=OverrideStruct
+    | remove=RemoveStruct
+    ;
+
+OptComma:
+    ','?
+    ;
+
+ParamValue:
+    value=Include OptComma | value=OverrideStruct OptComma | value=RemoveStruct OptComma | value=StructValue OptComma |
+    value=NUMBER OptComma | value=ReferenceValue OptComma | value=ForeachValue OptComma | value=ID OptComma | value=STRING OptComma |  value=ArrayValue OptComma
+    ;
+
+ForeachValue:
+    foreach=ID '.' param=ID
+    ;
+
+ReferenceTarget:
+    category=ID '[' name=ID ']' |
+    category=ID
+    ;
+
+ReferenceValue:
+    '@' reference=ReferenceTarget param_list*=ReferencePathElement
+    ;
+
+ReferencePathElement:
+    '.' param=ID
+    ;
+
+ArrayValue:
+    '[' values*=ParamValue ']'
+    ;
+
+StructValue:
+    struct_type=ID type=ID? variable_definitions=StructVariableDefinitions? '{'
+        params*=Param
+    '}'
+    ;
+
+StructVariableDefinitions:
+    '[' variable_definition *= StructVariableDefinition ']'
+    ;
+
+StructVariableDefinition:
+    variable_name=ID '=' reference=ReferenceValue OptComma
+    ;
+
+Include:
+    "include" include_ref=IncludeRef? filename=STRING
+    ;
+
+IncludeRef:
+    item_ref=ID variable_definitions=StructVariableDefinitions? '@'
+    ;
+
+OverrideStruct:
+    "override" struct_type=ID type=ID variable_definitions=StructVariableDefinitions? '{'
+        params*=Param
+    '}'
+    ;
+
+RemoveStruct:
+    "remove" struct_type=ID type=ID
+    ;

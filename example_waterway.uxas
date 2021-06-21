@@ -1,0 +1,23 @@
+
+// This is the example waterway configuration
+
+uxas {
+    Name: example_waterway
+    FormatVersion: "1.0"
+    EntityID: 100
+    EntityType: Aircraft
+
+    networks: [
+        include "bridge_amase_standard.uxas"
+    ]
+
+    services: [
+        include "standard_services.uxas"
+    ]
+
+/* Here is some stuff in a comment */
+
+    vehicles: [
+        include "waterway_vehicles.uxas"
+    ]
+}

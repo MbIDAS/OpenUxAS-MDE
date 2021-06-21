@@ -1,0 +1,405 @@
+
+service StatusReportService {
+    params {
+        VehicleId { type: integer, required: true }
+    }
+    messages {
+        receives : [
+            uxas.messages.uxnative.EntityJoin,
+            uxas.messages.uxnative.EntityExit,
+            uxas.messages.uxnative.AutopilotKeepAlive,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+        ]
+        sends: [
+            uxas.messages.uxnative.OnboardStatusReport
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "StatusReportService"
+        attr VehicleID: VehicleId
+    }
+}
+
+service Test_SimulationTime {
+    messages {
+        receives: [
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "Test_SimulationTime"
+    }
+}
+
+service TaskManagerService {
+    messages {
+        receives: [
+            afrl.cmasi.RemoveTasks,
+            afrl.cmasi.EntityState,
+            afrl.cmasi.EntityConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.cmasi.AirVehicleState,
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.cmasi.MissionCommand,
+            afrl.cmasi.AutomationResponse,
+            afrl.cmasi.FollowPathCommand
+        ]
+        sends: [
+            uxas.messages.uxnative.KillService,
+            uxas.messages.uxnative.CreateNewService,
+            afrl.cmasi.AutomationRequest,
+            uxas.messages.task.UniqueAutomationRequest
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "TaskManagerService"
+    }
+}
+
+service SensorManagerService {
+    messages {
+        receives: [
+            afrl.cmasi.RemoveTasks,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            uxas.messages.task.SensorFootprintRequests
+        ]
+        sends : [
+            uxas.messages.task.SensorFoorprintResponse
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "SensorManagerService"
+    }
+}
+
+service AutomationRequestValidatorService {
+    messages {
+        receives: [
+            afrl.cmasi.AutomationRequest,
+            afrl.impact.ImpactAutomationRequest,
+            uxas.messages.task.TaskAutomationRequest,
+            uxas.messages.task.UniqueAutomationResponse,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            afrl.cmasi.OperatingRegion,
+            afrl.cmasi.KeepInZone,
+            afrl.cmasi.KeepOutZone,
+            afrl.impact.AreaOfInterest,
+            afrl.impact.LineOfInterest,
+            afrl.impact.PointOfInterest,
+            afrl.cmasi.Task,
+            afrl.cmasi.RemoveTasks,
+            uxas.messages.task.TaskInitialized,
+            afrl.cmasi.ServiceStatus
+        ]
+        sends: [
+            afrl.cmasi.AutomationResponse,
+            uxas.messages.task.TaskAutomationResponse,
+            afrl.impact.ImpactAutomationResponse,
+            afrl.cmasi.ServiceStatus,
+            uxas.messages.task.UniqueAutomationResponse
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "AutomationRequestValidatorService"
+    }
+}
+
+service RoutePlannerVisibilityService {
+    params {
+        TurnRadiusOffset_m { type: float, required: true }
+        MinimumWaypointSeparation_m { type: float, required: true }
+    }
+    messages {
+        receives: [
+            afrl.cmasi.KeepOutZone,
+            afrl.cmasi.KeepInZone,
+            afrl.cmasi.OperatingRegion,
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            uxas.messages.route.RoutePlanRequest,
+            AircraftPathPlanner,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            uxas.messages.route.RouteRequest
+        ]
+        sends: [
+            uxas.messages.route.RoutePlanResponse
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "RoutePlannerVisibilityService"
+        attr TurnRadiusOffset_m: TurnRadiusOffset_m
+        attr MinimumWaypointSeparation_m: MinimumWaypointSeparation_m
+    }
+}
+
+service PlanBuilderService {
+    params {
+        AssignmentStartPointLead_m { type: float, required: true }
+    }
+    messages {
+        receives: [
+            uxas.messages.task.UniqueAutomationRequest,
+            uxas.messages.task.TaskAssignmentSummary,
+            uxas.messages.task.TaskImplementationResponse,
+            afrl.impact.ImpactAutomationRequest,
+            afrl.impact.ImpactAutomationResponse,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState
+        ]
+        sends: [
+            afrl.cmasi.ServiceStatus,
+            uxas.messages.task.TaskImplementationRequest,
+            uxas.messages.task.UniqueAutomationResponse
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "PlanBuilderService"
+        attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
+    }
+}
+
+service SendMessagesService {
+    params {
+        PathToMessageFiles { type: string, required: true }
+        messages { type: struct message SendMessagesServiceMessage , required: false }
+    }
+    xml {
+        tag: "Service"
+        attr Type: "SendMessagesService"
+        attr PathToMessageFiles: PathToMessageFiles
+        children messages {
+            tag: "Message"
+            attr MessageFileName: MessageFileName
+            attr SendTime_ms: SendTime_ms
+        }
+    }
+}
+
+message SendMessagesServiceMessage {
+    params {
+        MessageFileName { type: string, required: true }
+        SendTime_ms { type: integer, required: true }
+    }
+}
+
+service RouteAggregatorService {
+    messages {
+        receives: [
+            afrl.cmasi.EntityConfiguration,
+            afrl.impact.RadioTowerConfiguration,
+            afrl.cmasi.AirVehicleConfiguration,
+            afrl.vehicles.GroundVehicleConfiguration,
+            afrl.vehicles.SurfaceVehicleConfiguration,
+            afrl.vehicles.StationarySensorConfiguration,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            uxas.messages.task.UniqueAutomationRequest,
+            uxas.messages.task.TaskPlanOptions,
+            uxas.messages.route.RouteRequest,
+            uxas.messages.route.RoutePlanResponse
+        ]
+        sends: [
+            uxas.messages.route.RoutePlanRequest,
+            uxas.messages.route.RouteResponse,
+            uxas.messages.task.AssignmentCostMatrix,
+            afrl.cmasi.ServiceStatus,
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "RouteAggregatorService"
+    }
+}
+
+service AssignmentTreeBranchBoundService {
+    params {
+        NumberNodesMaximum { type: integer, required: true }
+        CostFunction { type: string, required: true }
+    }
+    messages {
+        receives: [ uxas.messages.task.UniqueAutomationRequest,
+                    uxas.messages.task.TaskPlanOptions,
+                    uxas.messages.task.AssignmentCostMatrix,
+                    uxas.project.pisr.PSIR_AssignmentType ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "AssignmentTreeBranchBoundService"
+        attr NumberNodesMaximum: NumberNodesMaximum
+        attr CostFunction: CostFunction
+    }
+}
+
+service AutomationDiagramDataService {
+    messages {
+        receives: [
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState,
+            uxas.messages.task.UniqueAutomationRequest,
+            uxas.messages.task.UniqueAutomationResponse,
+            afrl.cmasi.OperatingRegion,
+            afrl.cmasi.KeepOutZone,
+            afrl.cmasi.KeepInZone,
+            afrl.impact.AreaOfInterest,
+            afrl.impact.LineOfInterest,
+            afrl.impact.PointOfInterest,
+            afrl.impact.AreaOfInterest,
+            afrl.impact.LineOfInterest,
+            afrl.impact.PointOfInterest,
+            afrl.cmasi.Task
+        ]
+    }
+
+    xml {
+        tag: "Service"
+        attr Type: "AutomationDiagramDataService"
+    }
+}
+
+service WaypointPlanManagerService {
+    params {
+        NumberWaypointsToServe { type: integer, required: true }
+        NumberWaypointsOverlap { type: integer, required: true }
+        DefaultLoiterRadius_m { type: float, required: true }
+        ParamTurnType { type: enum, values: [TurnShort, FlyOver], required: true }
+        AddLoiterToEndOfSegments { type: bool, required: true }
+        AddLoiterToEndOfMission { type: bool, required: true }
+        LoopBackToFirstTask { type: bool, required: true }
+        GimbalPayloadId { type: integer, required: true }
+    }
+    messages {
+        receives: [
+            afrl.cmasi.AutomationResponse,
+            afrl.cmasi.AirVehicleState,
+            uxas.messages.uxnative.IncrementWaypoint,
+            afrl.cmasi.MissionCommand
+        ]
+        sends: [
+            afrl.cmasi.MissionCommand
+        ]
+    }
+    xml {
+        foreach vehicles {
+            tag: "Service"
+            attr Type: "WaypointPlanManagerService"
+            attr VehicleID: vehicles.ID
+            attr NumberWaypointsToServe: NumberWaypointsToServe
+            attr NumberWaypointsOverlap: NumberWaypointsOverlap
+            attr DefaultLoiterRadius_m: DefaultLoiterRadius_m
+            attr "param.turnType": ParamTurnType
+            attr AddLoiterToEndOfSegments: AddLoiterToEndOfSegments
+            attr AddLoiterToEndOfMission: AddLoiterToEndOfMission
+            attr LoopBackToFirstTask: LoopBackToFirstTask
+            attr GimbalPayloadId: GimbalPayloadId
+        }
+    }
+}
+
+service PlanBuilderService {
+    params {
+        AssignmentStartPointLead_m { type: float, required: true }
+    }
+    messages {
+        receives: [
+            uxas.messages.task.UniqueAutomationRequest,
+            uxas.messages.task.TaskAssignmentSummary,
+            uxas.messages.task.TaskImplementationResponse,
+            afrl.impact.ImpactAutomationRequest,
+            afrl.impact.ImpactAutomationResponse,
+            afrl.cmasi.EntityState,
+            afrl.impact.RadioTowerState,
+            afrl.cmasi.AirVehicleState, 
+            afrl.vehicles.GroundVehicleState,
+            afrl.vehicles.SurfaceVehicleState,
+            afrl.vehicles.StationarySensorState
+        ]
+        sends: [
+            afrl.cmasi.ServiceStatus,
+            uxas.messages.task.TaskImplementationRequest,
+            uxas.messages.task.UniqueAutomationResponse
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "PlanBuilderService"
+        attr AssignmentStartPointLead_m: AssignmentStartPointLead_m
+    }
+}
+
+service MessageLoggerDataService {
+    params {
+        LogFileMessageCountLimit { type: integer, required: true }
+        FilesPerSubDirectory { type: integer, required: true }
+        LogMessages { type: struct {
+                              NumberMessagesToSkip { type: integer, required: true }
+                            }[], required: true }
+    }
+    xml {
+        tag: "Service"
+        attr Type: "MessageLoggerDataService"
+        attr LogFileMessageCountLimit: LogFileMessageCountLimit
+        attr FilesPerSubDirectory: FilesPerSubDirectory
+        children LogMessages {
+            tag: "LogMessage"
+            attr MessageType: type
+            attr NumberMessagesToSkip: NumberMessagesToSkip
+        }
+    }
+}

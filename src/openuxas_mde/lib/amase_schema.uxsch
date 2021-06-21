@@ -1,0 +1,255 @@
+amase {
+    xml {
+        tag: "AMASE"
+        render: ScenarioData
+        children ScenarioEventList tag ScenarioEventList {
+            render: _
+        }
+    }
+}
+
+ScenarioData {
+    xml {
+        tag: "ScenarioData"
+        render: SimulationView
+        child ScenarioName: ScenarioName
+        child Date: Date
+        child ScenarioDuration: ScenarioDuration
+        child TrackAgeOut: TrackAgeOut
+    }
+}
+
+SimulationView {
+    xml {
+        tag: "SimulationView"
+        attr LongExtent: LongExtent
+        attr Latitude: Latitude
+        attr Longitude: Longitude
+    }
+}
+
+vehicle {
+    xml {
+        tag: "AirVehicleConfiguration"
+        attr Series: Series
+        attr Time: Time
+        child ID: ID
+        child Label: Label
+        child MinimumSpeed: MinimumSpeed
+        child MaximumSpeed: MaximumSpeed
+        child NominalSpeed: NominalSpeed
+        child NominalAltitude: NominalAltitude
+        child NominalAltitudeType: NominalAltitudeType
+        render tag "NominalFlightProfile": NominalFlightProfile
+        children AlternateFlightProfiles tag AlternateFlightProfiles {
+            render: _
+        }
+        children PayloadConfigurationList tag PayloadConfigurationList {
+            render: _
+        }
+        children AvailableLoiterTypes tag AvailableLoiterTypes {
+            tag: "LoiterType"
+            value: _
+        }
+        children AvailableTurnTypes tag AvailableTurnTypes {
+            tag: "TurnType"
+            value: _
+        }
+        child MinimumAltitude: MinimumAltitude
+        child MaximumAltitude: MaximumAltitude
+        child MinAltAboveGround: MinAltAboveGround
+    }
+}
+
+FlightProfile {
+    xml {
+        tag: "FlightProfile"
+        attr Series: Series
+        child Name: Name
+        child Airspeed: Airspeed
+        child PitchAngle: PitchAngle
+        child VerticalSpeed: VerticalSpeed
+        child MaxBankAngle: MaxBankAngle
+        child EnergyRate: EnergyRate
+    }
+}
+
+GimbalConfiguration {
+    xml {
+        tag: "GimbalConfiguration"
+        attr Series: Series
+        children SupportedPointingModes tag "SupportedPointingModes" {
+            tag: "GimbalPointingMode"
+            value: _
+        }
+        child MinAzimuth: MinAzimuth
+        child MaxAzimuth: MaxAzimuth
+        child IsAzimuthClamped: IsAzimuthClamped
+        child MinElevation: MinElevation
+        child MaxElevation: MaxElevation
+        child IsElevationClamped: IsElevationClamped
+        child MinRotation: MinRotation
+        child MaxRotation: MaxRotation
+        child IsRotationClamped: IsRotationClamped
+        child MaxAzimuthSlewRate: MaxAzimuthSlewRate
+        child MaxElevationSlewRate: MaxElevationSlewRate
+        child MaxRotationRate: MaxRotationRate
+        children ContainedPayloadList tag ContainedPayloadList {
+            tag: "uint32"
+            value: _
+        }
+        child PayloadID: PayloadID
+        child PayloadKind: PayloadKind
+    }
+}
+
+CameraConfiguration {
+    xml {
+        tag: "CameraConfiguration"
+        attr Series: Series
+        children SupportedWavelengthBands tag SupportedWavelengthBands {
+            tag: "WavelengthBand"
+            value: _
+        }
+        child FieldOfViewMode: FieldOfViewMode
+        child MinHorizontalFieldOfView: MinHorizontalFieldOfView
+        child MaxHorizontalFieldOfView: MaxHorizontalFieldOfView
+        children DiscreteHorizontalFieldOfViewList tag DiscreteHorizontalFieldOfViewList {
+            tag: "real32"
+            value: _
+        }
+        child VideoStreamHorizontalResolution: VideoStreamHorizontalResolution
+        child VideoStreamVerticalResolution: VideoStreamVerticalResolution
+        child PayloadID: PayloadID
+        child PayloadKind: PayloadKind
+    }
+}
+
+vehicle_state {
+    xml {
+        tag: "AirVehicleState"
+        attr Series: Series
+        child ID: ID
+        render tag Location: Location
+        child u: u
+        child v: v
+        child w: w
+        child udot: udot
+        child vdot: vdot
+        child wdot: wdot
+        child Heading: Heading
+        child Pitch: Pitch
+        child Roll: Roll
+        child p: p
+        child q: q
+        child r: r
+        child Airspeed: Airspeed
+        child VerticalSpeed: VerticalSpeed
+        child ActualEnergyRate: ActualEnergyRate
+        child EnergyAvailable: EnergyAvailable
+        child WindSpeed: WindSpeed
+        child WindDirection: WindDirection
+        child GroundSpeed: GroundSpeed
+        child GroundTrack: GroundTrack
+        children PayloadStateList tag "PayloadStateList" {
+            render: _
+        }
+        child CurrentWaypoint: CurrentWaypoint
+        child CurrentCommand: CurrentCommand
+        child Mode: Mode
+        children AssociatedTasks tag "AssociatedTasks" {
+            tag: "uint32"
+            value: _
+        }
+        child Time: Time
+    }
+}
+
+location3d {
+    xml {
+        tag: "Location3D"
+        attr Series: Series
+        child Altitude: Altitude
+        child AltitudeType: AltitudeType
+        child Latitude: Latitude
+        child Longitude: Longitude
+    }
+}
+
+GimbalState {
+    xml {
+        tag: "GimbalState"
+        attr Series: Series
+        child PointingMode: PointingMode
+        child Azimuth: Azimuth
+        child Elevation: Elevation
+        child Rotation: Rotation
+        child PayloadID: PayloadID
+    }
+}
+
+CameraState {
+    xml {
+        tag: "CameraState"
+        attr Series: Series
+        child HorizontalFieldOfView: HorizontalFieldOfView
+        child Footprint: Footprint
+        child PayloadID: PayloadID
+    }
+}
+
+MissionCommand {
+    xml {
+        tag: "MissionCommand"
+        attr Series: Series
+        attr Time: Time
+        child CommandID: CommandID
+        child VehicleID: VehicleID
+        children WaypointList tag "WaypointList" {
+            render: _
+        }
+        child FirstWaypoint: FirstWaypoint
+        child Status: Status
+    }
+}
+
+Waypoint {
+    xml {
+        tag: "Waypoint"
+        attr Series: Series
+        child Number: Number
+        child NextWaypoint: NextWaypoint
+        child Speed: Speed
+        child SpeedType: SpeedType
+        child ClimbRate: ClimbRate
+        child TurnType: TurnType
+        children VehicleActionList tag "VehicleActionList" {
+            render: _
+        }
+        child ContingencyWaypoint: ContingencyWaypoint
+        children AssociatedTasks tag "AssociatedTasks" {
+            render: _
+        }
+        child Altitude: Altitude
+        child AltitudeType: AltitudeType
+        child Latitude: Latitude
+        child Longitude: Longitude
+    }
+}
+
+LoiterAction {
+    xml {
+        tag: "LoiterAction"
+        child LoiterType: LoiterType
+        child Radius: Radius
+        child Axis: Axis
+        child Length: Length
+        child Direction: Direction
+        child Duration: Duration
+        child Airspeed: Airspeed
+        render tag "Location": Location
+        children AssociatedTaskList tag "AssociatedTaskList" {
+            render: _
+        }
+    }
+}

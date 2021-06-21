@@ -1,0 +1,26 @@
+
+network LmcpObjectNetworkTcpBridge {
+    xml {
+        tag: "Bridge"
+        attr Type: type
+        attr TcpAddress: TcpAddress
+        attr Server: Server
+        children Subscriptions {
+            tag: "SubscribeToMessage"
+            attr MessageType: _
+        }
+    }
+}
+
+network LmcpObjectNetworkPublishPullBridge {
+    xml {
+        tag: "Bridge"
+        attr Type: type
+        attr AddressPUB: AddressPUB
+        attr AddressPULL: AddressPULL
+        children Subscriptions {
+            tag: "SubscribeToMessage"
+            attr MessageType: _
+        }
+    }
+}

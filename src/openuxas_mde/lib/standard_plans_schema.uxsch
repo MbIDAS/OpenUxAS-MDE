@@ -1,0 +1,120 @@
+task LineSearchTask {
+    xml {
+        tag: "LineSearchTask"
+        attr Series: Series
+        children PointList tag "PointList" {
+            render: _
+        }
+        children ViewAngleList tag "ViewAngleList" {
+            render: _
+        }
+        child UseInertialViewAngles: UseInertialViewAngles
+        child TaskID: TaskID
+        child Label: Label
+        children EligibleEntities tag "EligibleEntities" {
+            tag: "int64"
+            value: _
+        }
+        child RevisitRate: RevisitRate
+        children Parameters tag "Parameters" {
+            render: _
+        }
+        child Priority: Priority
+        child Required: Required
+        children DesiredWavelengthBands tag "DesiredWavelengthBands" {
+            tag: "WavelengthBand"
+            value: _
+        }
+        child DwellTime: DwellTime
+        child GroundSampleDistance: GroundSampleDistance
+    }
+}
+
+wedge {
+    xml {
+        tag: "Wedge"
+        attr Series: Series
+        child AzimuthCenterline: AzimuthCenterline
+        child VerticalCenterline: VerticalCenterline
+    }
+}
+
+parameter {
+    xml {
+        tag: "KeyValuePair"
+        child Key: Key
+        child Value: Value
+    }
+}
+
+AutomationRequest {
+    xml {
+        tag: "AutomationRequest"
+        attr Series: Series
+        child ID: ID
+        child Label: Label
+        children EntityList tag "EntityList" {
+            tag: "int64"
+            value: _
+        }
+        children TaskList tag "TaskList" {
+            tag: "int64"
+            value: _
+        }
+    }
+}
+
+MissionCommand {
+    xml {
+        tag: "MissionCommand"
+        attr Series: Series
+        attr Time: Time
+        child CommandID: CommandID
+        child VehicleID: VehicleID
+        children WaypointList tag "WaypointList" {
+            render: _
+        }
+        child FirstWaypoint: FirstWaypoint
+        child Status: Status
+    }
+}
+
+Waypoint {
+    xml {
+        tag: "Waypoint"
+        attr Series: Series
+        child Number: Number
+        child NextWaypoint: NextWaypoint
+        child Speed: Speed
+        child SpeedType: SpeedType
+        child ClimbRate: ClimbRate
+        child TurnType: TurnType
+        children VehicleActionList tag "VehicleActionList" {
+            render: _
+        }
+        child ContingencyWaypoint: ContingencyWaypoint
+        children AssociatedTasks tag "AssociatedTasks" {
+            render: _
+        }
+        child Altitude: Altitude
+        child AltitudeType: AltitudeType
+        child Latitude: Latitude
+        child Longitude: Longitude
+    }
+}
+
+LoiterAction {
+    xml {
+        child LoiterType: LoiterType
+        child Radius: Radius
+        child Axis: Axis
+        child Length: Length
+        child Direction: Direction
+        child Duration: Duration
+        child Airspeed: Airspeed
+        render tag "Location": Location
+        children AssociatedTaskList tag "AssociatedTaskList" {
+            render: _
+        }
+    }
+}

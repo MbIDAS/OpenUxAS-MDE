@@ -1,0 +1,144 @@
+UxAS_Schema:
+    schemas *= SchemaDef
+    ;
+
+Comment:
+    /\/\/.*$/ |
+    /\/\*.*\*\//
+    ;
+
+SchemaDef:
+    struct_type=ID type=ID? '{'
+        params=ParamsDef?
+        messages=MessagesDef?
+        xml=XMLDef?
+    '}'
+    ;
+
+ParamsDef:
+    "params" "{"
+        paramDefs *= ParamDef
+    "}"
+    ;
+
+ParamDef:
+    paramName=ID "{" paramAttrs *= ParamDefAttr "}"
+    ;
+
+ParamDefAttr:
+    attrType="type" ":" type=ParamType ","?|
+    attrType="required" ":" required=BOOL ","?|
+    attrType="values" ":" "[" values *= ParamDefValue "]" ","?
+    ;
+
+ParamType:
+    type_name="struct" "{" paramDefs *= ParamDef "}" is_array="[]"? |
+    type_name="struct" struct_name=ID? struct_type=ID? is_array="[]"? |
+    type_name=ID is_array="[]"?
+    ;
+
+ParamDefValue:
+    paramDefValue=ID ","?
+    ;
+
+MessagesDef:
+    "messages" "{"
+        receives_messages = ReceivesMessages?
+        ","?
+        sends_messages = SendsMessages?
+    "}"
+    ;
+
+SendsMessages:
+    "sends" ":" "[" sends_messages *= MessageInList "]"
+    ;
+
+ReceivesMessages:
+    "receives" ":" "[" receives_messages *= MessageInList "]"
+    ;
+
+MessageInList:
+    prefix *= MessagePrefix message=ID ","?
+    ;
+
+MessagePrefix: ID "::" |
+    ID "."
+    ;
+
+XMLDef:
+    "xml" "{"
+        params *= Param
+    "}"
+    ;
+
+Param:
+    param=TagParam |
+    param=AttrParam |
+    param=ChildParam |
+    param=ChildrenParam |
+    param=ForeachParam |
+    param=ValueParam |
+    param=RenderParam
+    ;
+
+TagParam:
+    "tag" ":" tag_value=ValueSpec
+    ;
+
+AttrParam:
+    "attr" attr_type=STRING ":" attr_value=ValueSpec |
+    "attr" attr_type=ID ":" attr_value=ValueSpec
+    ;
+
+ChildrenParam:
+    "children" children_source=ID containing_tag=ContainingTag? "{"
+        children*=Param
+    "}" |
+    "children" children_source=ID containing_tag=ContainingTag?"{"
+        children*=Param
+    "}"
+    ;
+
+ContainingTag:
+    "tag" containing_tag=ID |
+    "tag" containing_tag=STRING
+    ;
+
+ChildParam:
+    "child" tag_name=ID ":" child_value=ValueSpec |
+    "child" tag_name=STRING ":" child_value=ValueSpec
+    ;
+
+ForeachParam:
+    "foreach" foreach*=ID "{"
+        foreach_params*=Param
+    "}"
+    ;
+
+ValueParam:
+    "value" ":" value=ValueSpec
+    ;
+
+RenderParam:
+    "render" containing_tag=ContainingTag? ":" value=ValueSpec
+    ;
+
+ValueSpec:
+    value=CurrentValue | value=StringValue | value=ForeachValue | value=NamedValue
+    ;
+
+StringValue:
+    string_value=STRING
+    ;
+
+NamedValue:
+    name=ID
+    ;
+
+ForeachValue:
+    foreach=ID '.' name=ID
+    ;
+
+CurrentValue:
+    "_"
+    ;
