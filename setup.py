@@ -66,7 +66,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/openuxas_mde/openuxas_mde',  # Optional
+    url='https://github.com/MbIDAS/OpenUxAS-MDE',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
@@ -176,7 +176,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'openuxas_mde=openuxas_mde:main.main',
+            'openuxas-mde-gen=openuxas_mde:main.main',
         ],
     },
 

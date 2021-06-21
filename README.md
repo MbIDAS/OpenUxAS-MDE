@@ -1,12 +1,19 @@
 # OpenUxAS-MDE
 ## A model-driven environment for OpenUxAS
 
+## Installing OpenUxAS-MDE
+To install OpenUxAS-MDE, just run the setup.py file in the root directory.
+Since by default it installs to /usr/local on Linux, you'll likely need to
+use sudo:
+```shell
+sudo python setup.py install
+```
 ### Generating a UxAS Configuration
 This project provides a domain-specific languages for defining OpenUxAS configurations, specifying messages, and defining new services.
 
 To run the program using the existing demo configuration, do:
 ```bash
-python openuxas-mde -o destdir example_waterway.uxas waterway_plan.uxas
+openuxas-mde-gen -o destdir example_waterway.uxas waterway_plan.uxas
 ```
 
 If you are generating configuration both for UxAS and for AMASE, you will
