@@ -1,8 +1,14 @@
 # OpenUxAS-MDE
+
 ## A model-driven environment for OpenUxAS
+This repository contains a model-driven configuration file generator for the OpenUxAS framework, available from
+https://github.com/afrl-rq/OpenUxAS. 
+
+## Acknowledgement
+This work was supported by the US Air Force Research Laboratory and DARPA.
 
 ## Installing OpenUxAS-MDE
-To install OpenUxAS-MDE, just run the setup.py file in the root directory.
+To install OpenUxAS-MDE, clone this repository and just run the setup.py file in the root directory.
 Since by default it installs to /usr/local on Linux, you'll likely need to
 use sudo:
 ```shell
@@ -582,7 +588,7 @@ to generate a `WaypointPlanManagerService` for every vehicle, or if you want
 to generate different configurations for different vehicles.
 
 ## Building a Setup File
-To create a file that can be installed with pip, from the root directory
+To create a 'wheel' file that can be installed with pip, from the root directory
 of the project do:
 ```shell
 python -m build --wheel
@@ -592,3 +598,4 @@ install with:
 ```shell
 pip install openuxas_mde-1.0.0-py2.py3-none-any.whl
 ```
+
