@@ -176,7 +176,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'openuxas-mde-gen=openuxas_mde:main.main',
+            'openuxas-mde-gen=openuxas_mde:main',
         ],
     },
 
