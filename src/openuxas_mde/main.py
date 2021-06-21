@@ -40,6 +40,8 @@ def main():
     default_output_dir = os.curdir
     if os.environ.get("UXAS_EXAMPLES_DIR") is not None:
         default_output_dir = os.environ.get("UXAS_EXAMPLES_DIR")
+    elif os.path.exists(os.path.join(os.path.expanduser("~"), "OpenUxAS")):
+        default_output_dir = os.path.join(os.path.expanduser("~"), "OpenUxAS")
 
     arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
     arg_parser.add_argument('-libpath', nargs=1, default=[""])
