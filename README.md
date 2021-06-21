@@ -12,7 +12,16 @@ sudo python setup.py install
 This project provides a domain-specific languages for defining OpenUxAS configurations, specifying messages, and defining new services.
 
 To run the program using the existing demo configuration, do:
-```bash
+If you have installed OpenUxAS in its default location (~/OpenUxAS), the
+generator will automatically use ~/OpenUxAS/examples as a destination directory,
+and you can generate an example this way:
+```shell
+openuxas-mde-gen example_waterway.uxas waterway_plan.uxas
+```
+You can also set an environment named UXAS_EXAMPLES_DIR to point to the
+OpenUxAS examples dir. Alternatively, you can specify an alternate output
+directory with the `-o` option:
+```shell
 openuxas-mde-gen -o destdir example_waterway.uxas waterway_plan.uxas
 ```
 
@@ -23,7 +32,9 @@ you only need the first file.
 #### Destination Directory
 By default, the program looks for an environment variable named UXAS_EXAMPLES_DIR
 and will write the configuration files to a subdirectory in that directory
-using "name:" field in the configuration file. In it can't find that directory,
+using "name:" field in the configuration file. If UXAS_EXAMPLES_DIR is not
+set, but there is an OpenUxAS/examples directory under your home directory,
+it will use that. If it can't find that directory,
 and if no output directory is specified with the `-o` option, then
 the configuration directory is created in the current directory. If you use the
 `-o` option to specify an alternate directory, note that it will still
