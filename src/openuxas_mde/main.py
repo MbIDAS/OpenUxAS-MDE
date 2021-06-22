@@ -67,6 +67,10 @@ def main():
     if len(rest_args) > 0:
         uxas_parser.load_config_from_file(rest_args[0])
 
+    if len(uxas_parser.configs) == 0:
+        print("No .uxas files in command-line, nothing to generate")
+        return
+
     type_checker = TypeChecker(uxas_schema_parser.schemas)
     type_checker.check_types(uxas_parser.configs[0])
 
