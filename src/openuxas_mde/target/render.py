@@ -22,6 +22,12 @@ class UxasXMLRenderer:
     def __init__(self, schemas):
         self.schemas = schemas
 
+    def is_reference(self, item):
+        if not isinstance(item, dict):
+            return False
+
+        return "category" in item and "name" in item and "param_list" in item
+
     def resolve_references(self, obj_value, env):
         if isinstance(obj_value, dict):
             if "category" in obj_value:
@@ -40,7 +46,16 @@ class UxasXMLRenderer:
 
                     obj_chain = obj_value["name"]
                 else:
-                    item = category
+                    if isinstance(category, list):
+                        new_category = []
+                        for c in category:
+                            if self.is_reference(c):
+                                new_category.append(self.resolve_references(c, env))
+                            else:
+                                new_category.append(c)
+                        item = new_category
+                    else:
+                        item = category
 
                 for param in obj_value["param_list"]:
                     if param not in item:
