@@ -122,5 +122,38 @@ class UxasParser:
             self.configs.append(simplified)
 
     def load_config_from_file(self, filename):
-        self.config = uxas_meta.model_from_file(filename)
-        self.simplify()
+        try:
+            self.config = uxas_meta.model_from_file(filename)
+            self.simplify()
+        except textx.exceptions.TextXSyntaxError as exc:
+            self.diagnose_syntax_error(exc, filename)
+
+    def diagnose_syntax_error(self, exc, filename):
+        f = open(filename, 'r')
+        curr_line = 0
+        for line in f:
+            curr_line += 1
+            if curr_line > exc.line:
+                break
+            if self.count_quotes(line) % 2 == 1:
+                print(exc.message)
+                print("Possible unclosed quote in file "+filename+" at line "+str(curr_line))
+                print(line)
+                raise ParseError(exc)
+        print(exc.message)
+        raise ParseError(exc)
+
+
+    def count_quotes(self, line):
+        pos = 0
+        quote_count = 0
+        while pos < len(line):
+            if line[pos] == '"':
+                if pos < len(line)-1:
+                    if line[pos+1] != '"':
+                        quote_count += 1
+                    else:
+                        pos += 2
+                        continue
+            pos += 1
+        return quote_count

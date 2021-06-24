@@ -1,3 +1,4 @@
+import openuxas_mde.lang.parser
 from openuxas_mde.lang.parser import UxasParser
 from openuxas_mde.lang.schema import UxasSchemaParser
 from openuxas_mde.lang.type_checker import TypeChecker
@@ -65,7 +66,10 @@ def main():
 
     uxas_parser = UxasParser(lib_path)
     if len(rest_args) > 0:
-        uxas_parser.load_config_from_file(rest_args[0])
+        try:
+            uxas_parser.load_config_from_file(rest_args[0])
+        except openuxas_mde.lang.parser.ParseError:
+            return
 
     if len(uxas_parser.configs) == 0:
         print("No .uxas files in command-line, nothing to generate")
@@ -76,7 +80,10 @@ def main():
 
     uxas_plan_parser = UxasParser(lib_path)
     if len(rest_args) > 1:
-        uxas_plan_parser.load_config_from_file(rest_args[1])
+        try:
+            uxas_plan_parser.load_config_from_file(rest_args[1])
+        except openuxas_mde.lang.parser.ParseError:
+            return
 
     renderer = UxasXMLRenderer(uxas_schema_parser.schemas)
 
@@ -167,3 +174,6 @@ def main():
                             "  config: "+config_filename+"\n",
                             "  rundir: RUNDIR_"+uxas_parser.configs[0]["Name"]+"\n"])
     config_file.close()
+
+if __name__ == '__main__':
+    main()
