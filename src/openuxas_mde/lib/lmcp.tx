@@ -1,0 +1,71 @@
+lmcpConfig:
+    "SeriesName" ":" seriesName=ID
+    "Namespace" ":" namespace=ID
+    "Version" ":" version=NUMBER
+
+    enums=lmcpEnums?
+
+    structs=lmcpStructs?
+    ;
+
+OptComma:
+    ','?
+    ;
+
+lmcpEnums:
+    "Enums" ":" "["
+        enumList *= lmcpEnum
+    "]"
+    ;
+
+lmcpEnum: "enum" name=ID "{"
+    values *= lmcpEnumEntry
+    "}"
+    OptComma
+    ;
+
+lmcpEnumEntry: enumName=ID "=" enumValue=lmcpValue OptComma
+    ;
+
+lmcpValue: value=ID | value=NUMBER | value=STRING
+    ;
+
+lmcpStructs:
+    "Structs" ":" "["
+       structList *= lmcpStruct
+    "]"
+    ;
+
+lmcpStruct:
+    "struct" name=ID extension=lmcpStructExtension? "{"
+        fields *= lmcpStructField
+    "}"
+    OptComma
+    ;
+
+lmcpStructExtension:
+    "extends" reference=lmcpReference
+    ;
+
+lmcpStructField:
+    name=ID ":" type=lmcpReference size=lmcpTypeSize? default=lmcpFieldDefault? units=lmcpUnits?
+    OptComma
+    ;
+
+lmcpFieldDefault:
+    "default" "=" value=lmcpValue
+    ;
+
+lmcpUnits:
+    "units" "=" value=ID
+    ;
+
+lmcpTypeSize:
+    "[" size=NUMBER "]"
+    ;
+
+lmcpReference:
+    ID "/" lmcpReference |
+    ID
+    ;
+
