@@ -25,7 +25,7 @@ Enum {
 
 Entry {
     xml {
-        tag: "entry"
+        tag: "Entry"
         attr Name: name
         attr Value: value
     }
@@ -47,7 +47,7 @@ Field {
         tag: "Field"
         attr Name: name
         attr Type: type
-        attr Size: size
+        attr MaxArrayLength: size
         attr Default: default
         attr Units: units
     }

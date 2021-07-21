@@ -1,4 +1,4 @@
-SeriesName: TestSeries
+SeriesName: TestSer
 Namespace: Example
 Version: 1
 
@@ -10,7 +10,7 @@ Enums: [
 ]
 
 Structs: [
-    struct Position extends AnotherMDM/Point {
+    struct Position extends CMASI/Location3D {
         Latitude: real64 default=0 units=Degree
         Longitude: real64 default=0 units=Degree
         Zone: char[10] default="a"
@@ -19,7 +19,7 @@ Structs: [
     struct Status {
         VehicleID: int32 default=0
         Condition: VehicleCondition
-        Location: AnotherMDM/Point
+        Location: CMASI/Location3D
         Extra: LmcpObject
     }
 ]

@@ -60,9 +60,11 @@ class LMCPParser:
             if node.units is not None:
                 units = node.units.value
             size = None
+            arraySuffix=""
             if node.size is not None:
                 size = node.size.size
-            return {"struct_type": "Field", "type": "", "name": node.name, "type": node.type, "size": size,
+                arraySuffix = "[]"
+            return {"struct_type": "Field", "name": node.name, "type": node.type+arraySuffix, "size": size,
                     "default": default, "units": units}
 
     def simplify(self, config):

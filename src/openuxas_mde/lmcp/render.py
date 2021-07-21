@@ -151,7 +151,9 @@ class LMCPXMLRenderer:
 
         for param in xml_schema:
             if param["type"] == "attr":
-                element.attrib[param["attr_type"]] = str(self.get_value(obj, param["attr_value"], env, foreach_map))
+                v = self.get_value(obj, param["attr_value"], env, foreach_map)
+                if v is not None:
+                    element.attrib[param["attr_type"]] = str(v)
             elif param["type"] == "children":
                 children = []
                 if param["children_source"] in obj:
@@ -162,8 +164,10 @@ class LMCPXMLRenderer:
                 for child in children:
                     self.render_with_schema(child_container, child, env, param["children_schema"], foreach_map)
             elif param["type"] == "child":
-                child_elem = ET.SubElement(element, param["tag_name"])
-                child_elem.text = str(self.get_value(obj, param["child_value"], env, foreach_map))
+                v = self.get_value(obj, param["child_value"], env, foreach_map)
+                if v is not None:
+                    child_elem = ET.SubElement(element, param["tag_name"])
+                    child_elem.text = str(v)
             elif param["type"] == "reference":
                 collection = env.lookup(param["collection"])
                 if collection is None:
@@ -178,7 +182,9 @@ class LMCPXMLRenderer:
                 for foreach_map in foreach_list:
                     self.render_with_schema(element, obj, env, param["foreach_schema"], foreach_map)
             elif param["type"] == "value":
-                element.text = str(self.get_value(obj, param["value"], env, foreach_map))
+                v = self.get_value(obj, param["value"], env, foreach_map)
+                if v is not None:
+                    element.text  = str(v)
             elif param["type"] == "render":
                 child_container = element
                 if "containing_tag" in param and param["containing_tag"] is not None:

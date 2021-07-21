@@ -19,8 +19,9 @@ def load_lmcp_schemas(lib_path):
 
 def write_elementtree(elem, filename):
     xmlstr = xml.dom.minidom.parseString(ET.tostring(elem)).toprettyxml()
+    xmlstr_temp = xmlstr.replace("?>", "?>\n<!DOCTYPE MDM SYSTEM 'MDM.DTD'>")
     file = open(filename, "w")
-    file.write(xmlstr)
+    file.write(xmlstr_temp)
     file.close()
 
 def lmcp_main():
@@ -55,6 +56,7 @@ def lmcp_main():
     lmcp_renderer = LMCPXMLRenderer(lmcp_schema_parser.schemas)
 
     lmcp_xml = lmcp_renderer.render(None, cfg)
+
 
     xml_filename = cfg["seriesName"]+".xml"
     write_elementtree(lmcp_xml, os.path.join(output_dir, xml_filename))
