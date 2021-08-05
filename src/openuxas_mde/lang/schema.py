@@ -51,6 +51,9 @@ class UxasSchemaParser:
             return param_defs
         elif textx.textx_isinstance(node, uxas_meta.namespaces["uxas_schema"]["ParamDef"]):
             param_name = node.paramName
+            param_desc = ""
+            if node.paramDesc is not None:
+                param_desc = node.paramDesc
             required = False
             param_type = {}
             param_values = None
@@ -64,6 +67,7 @@ class UxasSchemaParser:
                     for v in attr.values:
                         param_values.append(self.simplify_ast(v))
             param_type["param_name"] = param_name
+            param_type["param_desc"] = param_desc
             param_type["param_required"] = required
             if param_values:
                 param_type["param_values"] = param_values

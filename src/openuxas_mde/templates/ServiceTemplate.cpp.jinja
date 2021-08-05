@@ -1,0 +1,109 @@
+// ===============================================================================
+// Authors: AFRL/RQQA
+// Organization: Air Force Research Laboratory, Aerospace Systems Directorate, Power and Control Division
+// 
+// Copyright (c) 2017 Government of the United State of America, as represented by
+// the Secretary of the Air Force.  No copyright is claimed in the United States under
+// Title 17, U.S. Code.  All Other Rights Reserved.
+// ===============================================================================
+
+/* 
+ * File:   {{serviceName}}.cpp
+ *
+ * Created on {{creationDate}}
+ *
+ * <Service Type="{{serviceName}}" {% for configParam in configParams %} {{configParam.name}}="{{configParam.sample}}" {% endfor %} />
+ *
+ */
+
+// include header for this service
+#include "{{serviceName}}.h"
+
+//include for KeyValuePair LMCP Message
+#include "afrl/cmasi/KeyValuePair.h"
+
+#include <iostream>     // std::cout, cerr, etc
+
+ {% for configParam in configParams %}#define STRING_XML_{{configParam.paramNameAllCaps}} "{{configParam.paramName}}""
+ {% endfor %}
+
+// namespace definitions
+namespace uxas  // uxas::
+{
+namespace service   // uxas::service::
+{
+
+// this entry registers the service in the service creation registry
+{{serviceName}}::ServiceBase::CreationRegistrar<{{serviceName}}>
+{{serviceName}}::s_registrar({{serviceName}}::s_registryServiceTypeNames());
+
+// service constructor
+{{serviceName}}::{{serviceName}}()
+: ServiceBase({{serviceName}}::s_typeName(), {{serviceName}}::s_directoryName()) { };
+
+// service destructor
+{{serviceName}}::~{{serviceName}}() { };
+
+
+bool {{serviceName}}::configure(const pugi::xml_node& ndComponent)
+{
+    bool isSuccess(true);
+
+    // process options from the XML configuration node:
+ {% for configParam in configParams %}
+    if (!ndComponent.attribute(STRING_XML_{{configParam.paramNameAllCaps}}).empty())
+    {
+        m_{{configParam.paramName}} = ndComponent.attribute(STRING_XML_{{configParam.paramNameAllCaps}}).{{configParam.paramValueExtractor}}();
+    }
+ {% endfor %}
+    // subscribe to messages::
+ {% for receive in receives %}    addSubscriptionAddress({{receive.message}});
+ {% endfor %}
+    return (isSuccess);
+}
+
+bool {{serviceName}}::initialize()
+{
+    // perform any required initialization before the service is started
+    std::cout << "*** INITIALIZING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+    
+    return (true);
+}
+
+bool {{serviceName}}::start()
+{
+    // perform any actions required at the time the service starts
+    std::cout << "*** STARTING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+    
+    return (true);
+};
+
+bool {{serviceName}}::terminate()
+{
+    // perform any action required during service termination, before destructor is called.
+    std::cout << "*** TERMINATING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+    
+    return (true);
+}
+
+bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communications::data::LmcpMessage> receivedLmcpMessage)
+{
+ {% for receive in receives %}   if ({{receive.test}}(receivedLmcpMessage->m_object))
+    {
+        std::unique_ptr<{{receive.message}}> {{receive.prefix}}In = std::static_pointer_cast<{{receive.message}}> (receivedLmcpMessage->m_object);
+        std::cout << "*** RECEIVED:: Service[" << s_typeName() << "] Received a {{receive.name}} *** " << std::endl;
+
+        handle{{receive.name}}({{receive.prefix}}In);
+    }
+ {% endfor %}
+    return false;
+}
+
+{% for receive in receives %}void handle{{receive.name}}(std::unique_ptr<{{receive.message}}> message)
+{
+    // add message handler here
+}
+{% endfor %}
+
+}; //namespace service
+}; //namespace uxas
