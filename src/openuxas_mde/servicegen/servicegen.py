@@ -33,6 +33,43 @@ def make_receives_structure(receives):
     header_name = "/".join(parts)
     return {"message": recv, "test": test, "prefix": prefix_name, "name": parts[-1], "header_name": header_name }
 
+def parse_existing(filename, preserved, generate):
+    if os.path.exists(filename):
+        file = open(filename, "r")
+        preserving = False
+        preserve_name = ""
+        preserve_lines = []
+
+        for line in file:
+            if line.startswith("///BEGIN_PRESERVE_"):
+                new_preserve_name = line.strip()[len("///BEGIN_PRESERVE_"):]
+                if preserving:
+                    print("Error parsing preserve comments, was already parsing BEGIN_PRESERVE_"+preserve_name+
+                          ", encountered BEGIN_PRESERVE_"+new_preserve_name)
+                    file.close()
+                    return False
+                preserving = True
+                preserve_name = new_preserve_name
+                preserve_lines = []
+            elif line.startswith("///END_PRESERVE_"):
+                new_preserve_name = line.strip()[len("///END_PRESERVE_"):]
+                if not preserving:
+                    print("Error parsing preserve comments, encountered END_PRESERVE_"+new_preserve_name+
+                          " but there was no corresponding BEGIN_PRESERVE_"+new_preserve_name)
+                    file.close()
+                    return False
+                preserved[preserve_name] = "".join(preserve_lines).strip()
+                preserving = False
+                preserve_name = ""
+                preserve_lines = []
+            elif line.startswith("///OVERRIDE_"):
+                override_name = line.strip()[len("///OVERRIDE_"):]
+                generate[override_name] = False
+            else:
+                preserve_lines.append(line)
+        file.close()
+    return True
+
 def main():
     system_lib_path = pkg_resources.resource_filename("openuxas_mde", "lib")
 
@@ -98,6 +135,37 @@ def main():
         service_data["sends"] = [s.replace(".", "::") for s in service["messages"]["sends"]]
         service_data["creationDate"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        section_names = [
+            "CPP_DECLS",
+            "CONSTRUCTOR",
+            "DESTRUCTOR",
+            "CONFIGURE",
+            "INITIALIZE",
+            "START",
+            "TERMINATE",
+            "RECEIVE",
+            "ADDITIONAL",
+            "INCLUDES",
+            "PUBLIC",
+            "PRIVATE"]
+
+        for r in service_data["receives"]:
+            section_names.append("RECEIVE_"+r["name"])
+
+        preserved = {}
+        generate = {}
+        for sn in section_names:
+            preserved[sn] = ""
+            generate[sn] = True
+
+        if not parse_existing(os.path.join(output_dir, service_data["serviceName"]+".h"), preserved, generate):
+            return
+        if not parse_existing(os.path.join(output_dir, service_data["serviceName"]+".cpp"), preserved, generate):
+            return
+
+        service_data["preserved"] = preserved
+        service_data["generate"] = generate
+
         file = open(os.path.join(output_dir, service_data["serviceName"]+".h"), "w")
         file.write(h_template.render(service_data))
         file.close()
@@ -107,8 +175,6 @@ def main():
         file.write(cpp_template.render(service_data))
         file.close()
         print(cpp_template.render(service_data))
-
-
 
 if __name__ == '__main__':
     main()

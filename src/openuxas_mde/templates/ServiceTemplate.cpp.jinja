@@ -33,21 +33,37 @@ namespace uxas  // uxas::
 namespace service   // uxas::service::
 {
 
-{% for receive in receives %}void handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message);
-{% endfor %}
-
+///BEGIN_PRESERVE_CPP_DECLS
+{{preserved["CPP_DECLS"]}}
+///END_PRESERVE_CPP_DECLS
 // this entry registers the service in the service creation registry
 {{serviceName}}::ServiceBase::CreationRegistrar<{{serviceName}}>
 {{serviceName}}::s_registrar({{serviceName}}::s_registryServiceTypeNames());
 
+{% if generate["CONSTRUCTOR"] %}
 // service constructor
 {{serviceName}}::{{serviceName}}()
-: ServiceBase({{serviceName}}::s_typeName(), {{serviceName}}::s_directoryName()) { };
+: ServiceBase({{serviceName}}::s_typeName(), {{serviceName}}::s_directoryName()) {
+///BEGIN_PRESERVE_CONSTRUCTOR
+{{preserved["CONSTRUCTOR"]}}
+///END_PRESERVE_CONSTRUCTOR
+};
+{% else %}
+///OVERRIDE_CONSTRUCTOR
+{% endif %}
 
+{% if generate["DESTRUCTOR"] %}
 // service destructor
-{{serviceName}}::~{{serviceName}}() { };
+{{serviceName}}::~{{serviceName}}() {
+///BEGIN_PRESERVE_DESTRUCTOR
+{{preserved["DESTRUCTOR"]}}
+///END_PRESERVE_DESTRUCTOR
+};
+{% else %}
+///OVERRIDE_DESTRUCTOR
+{% endif %}
 
-
+{% if generate["CONFIGURE"] %}
 bool {{serviceName}}::configure(const pugi::xml_node& ndComponent)
 {
     bool isSuccess(true);
@@ -62,33 +78,61 @@ bool {{serviceName}}::configure(const pugi::xml_node& ndComponent)
     // subscribe to messages::
  {% for receive in receives %}    addSubscriptionAddress({{receive.message}}::Subscription);
  {% endfor %}
+///BEGIN_PRESERVE_CONFIGURE
+{{preserved["CONFIGURE"]}}
+///END_PRESERVE_CONFIGURE
     return (isSuccess);
 }
+{% else %}
+///OVERRIDE_CONFIGURE
+{% endif %}
 
+{% if generate["INITIALIZE"] %}
 bool {{serviceName}}::initialize()
 {
     // perform any required initialization before the service is started
     std::cout << "*** INITIALIZING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
-    
+
+///BEGIN_PRESERVE_INITIALIZE
+{{preserved["INITIALIZE"]}}
+///END_PRESERVE_INITIALIZE
     return (true);
 }
+{% else %}
+///OVERRIDE_INITIALIZE
+{% endif %}
 
+{% if generate["START"] %}
 bool {{serviceName}}::start()
 {
     // perform any actions required at the time the service starts
     std::cout << "*** STARTING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
     
+///BEGIN_PRESERVE_START
+{{preserved["START"]}}
+///END_PRESERVE_START
     return (true);
 };
+{% else %}
+///OVERRIDE_START
+{% endif %}
 
+{% if generate["TERMINATE"] %}
 bool {{serviceName}}::terminate()
 {
     // perform any action required during service termination, before destructor is called.
     std::cout << "*** TERMINATING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
     
+///BEGIN_PRESERVE_TERMINATE
+{{preserved["TERMINATE"]}}
+///END_PRESERVE_TERMINATE
     return (true);
 }
+{% else %}
+///OVERRIDE_TERMINATE
+{% endif %}
 
+{% if generate["RECEIVE"] %}
 bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communications::data::LmcpMessage> receivedLmcpMessage)
 {
  {% for receive in receives %}   if ({{receive.test}}(receivedLmcpMessage->m_object))
@@ -99,14 +143,30 @@ bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communica
         handle{{receive.name}}({{receive.prefix}}In);
     }
  {% endfor %}
+///BEGIN_PRESERVE_RECEIVE
+{{preserved["RECEIVE"]}}
+///END_PRESERVE_RECEIVE
     return false;
 }
+{% else %}
+///OVERRIDE_RECEIVE
+{% endif %}
 
-{% for receive in receives %}void handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message)
+{% for receive in receives %}{% if generate["RECEIVE_"+receive.name] %}void {{serviceName}}::handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message)
 {
     // add message handler here
+///BEGIN_PRESERVE_RECEIVE_{{receive.name}}
+{{preserved["RECEIVE_"+receive.name]}}
+///END_PRESERVE_RECEIVE_{{receive.name}}
 }
+{% else %}
+///OVERRIDE_RECEIVE_{{receive.name}}
+{% endif %}
 {% endfor %}
+
+///BEGIN_PRESERVE_ADDITIONAL
+{{preserved["ADDITIONAL"]}}
+///END_PRESERVE_ADDITIONAL
 
 }; //namespace service
 }; //namespace uxas

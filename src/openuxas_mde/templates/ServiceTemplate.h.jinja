@@ -25,6 +25,10 @@
 {% for receive in receives %}#include "{{receive.header_name}}.h"
 {% endfor %}
 
+///BEGIN_PRESERVE_INCLUDES
+{{preserved["INCLUDES"]}}
+///END_PRESERVE_INCLUDES
+
 namespace uxas
 {
 namespace service
@@ -90,6 +94,10 @@ public:
     virtual
     ~{{serviceName}}();
 
+///BEGIN_PRESERVE_PUBLIC
+{{preserved["PUBLIC"]}}
+///END_PRESERVE_PUBLIC
+
 private:
 
     static
@@ -119,6 +127,12 @@ private:
  {% for configParam in configParams %}   {{configParam.paramType}} m_{{configParam.paramName}};
  {% endfor %}
 
+ {% for receive in receives %}   void handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message);
+ {% endfor %}
+
+///BEGIN_PRESERVE_PRIVATE
+{{preserved["PRIVATE"]}}
+///END_PRESERVE_PRIVATE
 
 private:
     // storage for the option entries
