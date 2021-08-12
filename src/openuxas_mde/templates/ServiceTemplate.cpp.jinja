@@ -24,7 +24,7 @@
 
 #include <iostream>     // std::cout, cerr, etc
 
- {% for configParam in configParams %}#define STRING_XML_{{configParam.paramNameAllCaps}} "{{configParam.paramName}}""
+ {% for configParam in configParams %}#define STRING_XML_{{configParam.paramNameAllCaps}} "{{configParam.paramName}}"
  {% endfor %}
 
 // namespace definitions
@@ -32,6 +32,9 @@ namespace uxas  // uxas::
 {
 namespace service   // uxas::service::
 {
+
+{% for receive in receives %}void handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message);
+{% endfor %}
 
 // this entry registers the service in the service creation registry
 {{serviceName}}::ServiceBase::CreationRegistrar<{{serviceName}}>
@@ -57,7 +60,7 @@ bool {{serviceName}}::configure(const pugi::xml_node& ndComponent)
     }
  {% endfor %}
     // subscribe to messages::
- {% for receive in receives %}    addSubscriptionAddress({{receive.message}});
+ {% for receive in receives %}    addSubscriptionAddress({{receive.message}}::Subscription);
  {% endfor %}
     return (isSuccess);
 }
@@ -90,7 +93,7 @@ bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communica
 {
  {% for receive in receives %}   if ({{receive.test}}(receivedLmcpMessage->m_object))
     {
-        std::unique_ptr<{{receive.message}}> {{receive.prefix}}In = std::static_pointer_cast<{{receive.message}}> (receivedLmcpMessage->m_object);
+        std::shared_ptr<{{receive.message}}> {{receive.prefix}}In = std::static_pointer_cast<{{receive.message}}> (receivedLmcpMessage->m_object);
         std::cout << "*** RECEIVED:: Service[" << s_typeName() << "] Received a {{receive.name}} *** " << std::endl;
 
         handle{{receive.name}}({{receive.prefix}}In);
@@ -99,7 +102,7 @@ bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communica
     return false;
 }
 
-{% for receive in receives %}void handle{{receive.name}}(std::unique_ptr<{{receive.message}}> message)
+{% for receive in receives %}void handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message)
 {
     // add message handler here
 }

@@ -1,4 +1,4 @@
-)/ ===============================================================================
+// ===============================================================================
 // Authors: AFRL/RQQA
 // Organization: Air Force Research Laboratory, Aerospace Systems Directorate, Power and Control Division
 // 
@@ -22,6 +22,8 @@
 #include "ServiceBase.h"
 #include "CallbackTimer.h"
 #include "TypeDefs/UxAS_TypeDefs_Timer.h"
+{% for receive in receives %}#include "{{receive.header_name}}.h"
+{% endfor %}
 
 namespace uxas
 {
@@ -35,7 +37,7 @@ namespace service
  * 
  * </ul> @n
  * 
- * Configuration String: <Service Type="{{ServiceName}}" {% for configParam in configParams %} {{configParam.name}}="{{configParam.sample}}" {% endfor %} />
+ * Configuration String: <Service Type="{{serviceName}}" {% for configParam in configParams %} {{configParam.paramName}}="{{configParam.sample}}" {% endfor %} />
  * 
  * Options:
  {% for configParam in configParams %}*  - {{configParam.param_name}} - {{configParam.param_desc}}{% endfor %}

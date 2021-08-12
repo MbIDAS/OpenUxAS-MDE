@@ -27,17 +27,18 @@ def uncap(s):
 def make_receives_structure(receives):
     parts = receives.split(".")
     recv = "::".join(parts)
-    test_name = "Is"+parts[-1]
+    test_name = "is"+parts[-1]
     test = "::".join(parts[:-1] + [test_name])
     prefix_name = uncap(parts[-1])
-    return {"message": recv, "test": test, "prefix": prefix_name, "name": parts[-1] }
+    header_name = "/".join(parts)
+    return {"message": recv, "test": test, "prefix": prefix_name, "name": parts[-1], "header_name": header_name }
 
 def main():
     system_lib_path = pkg_resources.resource_filename("openuxas_mde", "lib")
 
     default_output_dir = os.curdir
-    if os.environ.get("UXAS_EXAMPLES_DIR") is not None:
-        default_output_dir = os.environ.get("UXAS_EXAMPLES_DIR")
+    if os.environ.get("UXAS_CPP_DIR") is not None:
+        default_output_dir = os.path.join(os.environ.get("UXAS_CPP_DIR"), "Services")
     elif os.path.exists(os.path.join(os.path.expanduser("~"), "OpenUxAS", "examples")):
         default_output_dir = os.path.join(os.path.expanduser("~"), "OpenUxAS", "examples")
 
@@ -83,7 +84,7 @@ def main():
         for param in service["params"]:
             param["paramName"] = type_name_to_cpp_type(param["param_name"])
             param["paramType"] = type_name_to_cpp_type(param["param_type"])
-            pt = param["paramType"]
+            pt = param["param_type"]
             if pt == "integer":
                 param["paramValueExtractor"] = "as_int"
             else:
