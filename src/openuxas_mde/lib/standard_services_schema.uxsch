@@ -212,6 +212,14 @@ service SendMessagesService {
         PathToMessageFiles { type: string, required: true }
         messages { type: struct message SendMessagesServiceMessage , required: false }
     }
+    messages {
+        receives: [
+            uxas.messages.uxnative.StartupComplete
+        ]
+
+        sends: [
+        ]
+    }
     xml {
         tag: "Service"
         attr Type: "SendMessagesService"

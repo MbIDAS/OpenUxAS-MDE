@@ -1,4 +1,5 @@
 import openuxas_mde.lang.parser
+from openuxas_mde.lang import config_checker
 from openuxas_mde.lang.parser import UxasParser
 from openuxas_mde.lang.schema import UxasSchemaParser
 from openuxas_mde.lang.type_checker import TypeChecker
@@ -20,6 +21,11 @@ def load_uxas_schemas(lib_path):
 
     return uxas_schema_parser
 
+def load_external_services_schemas(lib_path):
+    uxas_schema_parser = UxasSchemaParser(lib_path)
+    uxas_schema_parser.load_schema_from_file("external_services.uxsch")
+
+    return uxas_schema_parser
 
 def load_amase_schemas(lib_path):
     amase_schema_parser = UxasSchemaParser(lib_path)
@@ -47,11 +53,15 @@ def main():
     arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
     arg_parser.add_argument('-libpath', nargs=1, default=[""])
     arg_parser.add_argument('-o', nargs=1, default=[default_output_dir])
+    arg_parser.add_argument('-exclude_sent', nargs=1, default=[""])
+    arg_parser.add_argument('-exclude_received', nargs=1, default=[""])
 
     parsed_args, rest_args = arg_parser.parse_known_args()
     parsed_args = vars(parsed_args)
 
     output_dir = parsed_args["o"][0]
+    exclude_sent_file = parsed_args["exclude_sent"][0]
+    exclude_received_file = parsed_args["exclude_received"][0]
 
     lib_path_args = []
     if "libpath" in parsed_args:
@@ -63,6 +73,7 @@ def main():
     lib_path = lib_path_args + [system_lib_path]
 
     uxas_schema_parser = load_uxas_schemas(lib_path)
+    external_services_schema = load_external_services_schemas(lib_path)
 
     uxas_parser = UxasParser(lib_path)
     if len(rest_args) > 0:
@@ -84,6 +95,23 @@ def main():
             uxas_plan_parser.load_config_from_file(rest_args[1])
         except openuxas_mde.lang.parser.ParseError:
             return
+
+    excludes = { "sent": [], "received": []}
+    if exclude_sent_file != "":
+        send_file = open(exclude_sent_file, 'r')
+        for line in send_file:
+            excludes["sent"].append(line.strip())
+        send_file.close()
+
+    if exclude_received_file != "":
+        receive_file = open(exclude_received_file, 'r')
+        for line in receive_file:
+            excludes["received"].append(line.strip())
+        receive_file.close()
+
+    config_checker.check_message_send_receive(uxas_parser.configs[0], uxas_schema_parser.schemas,
+                                              external_services_schema.schemas,
+                                              excludes)
 
     renderer = UxasXMLRenderer(uxas_schema_parser.schemas)
 

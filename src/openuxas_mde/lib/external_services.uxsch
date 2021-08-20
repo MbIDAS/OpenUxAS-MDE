@@ -1,0 +1,13 @@
+service ServiceManager {
+    messages {
+        receives: [
+            uxas.messages.uxnative.CreateNewService,
+            uxas.messages.uxnative.KillService
+        ]
+
+        sends: [
+            uxas.messages.uxnative.StartupComplete,
+            uxas.messages.uxnative.KillService
+        ]
+    }
+}

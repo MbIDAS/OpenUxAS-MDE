@@ -70,7 +70,7 @@ def parse_existing(filename, preserved, generate):
         file.close()
     return True
 
-def main():
+def servicegen_main():
     system_lib_path = pkg_resources.resource_filename("openuxas_mde", "lib")
 
     default_output_dir = os.curdir
@@ -177,4 +177,4 @@ def main():
         print(cpp_template.render(service_data))
 
 if __name__ == '__main__':
-    main()
+    servicegen_main()
