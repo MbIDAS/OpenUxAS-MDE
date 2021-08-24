@@ -1,0 +1,27 @@
+
+// This is the demo application
+
+uxas {
+    Name: demo_app
+    FormatVersion: "1.0"
+    EntityID: 100
+    EntityType: Aircraft
+
+    networks: [
+        include "bridge_amase_standard.uxas"
+    ]
+
+    services: [
+        include "standard_services.uxas"
+        service DemoService1 {
+        }
+        service DemoService2 {
+        }
+    ]
+
+/* Here is some stuff in a comment */
+
+    vehicles: [
+        include "demo_vehicles.uxas"
+    ]
+}
