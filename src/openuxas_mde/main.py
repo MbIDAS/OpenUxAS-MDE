@@ -10,14 +10,30 @@ import xml.dom.minidom
 import argparse
 import pkg_resources
 
+exclude_schemas_from_load = {
+    "network_schema.uxsch",
+    "standard_services_schema.uxsch",
+    "uxas_configuration_schema.uxsch",
+    "standard_vehicles_schema.uxsch",
+    "standard_plans_schema.uxsch",
+    "external_services.uxsch",
+    "amase_schema.uxsch"
+}
 
 def load_uxas_schemas(lib_path):
     uxas_schema_parser = UxasSchemaParser(lib_path)
+
     uxas_schema_parser.load_schema_from_file("network_schema.uxsch")
     uxas_schema_parser.load_schema_from_file("standard_services_schema.uxsch")
     uxas_schema_parser.load_schema_from_file("uxas_configuration_schema.uxsch")
     uxas_schema_parser.load_schema_from_file("standard_vehicles_schema.uxsch")
     uxas_schema_parser.load_schema_from_file("standard_plans_schema.uxsch")
+
+    for lib_part in lib_path:
+        files = os.listdir(lib_part)
+        for file in files:
+            if file.endswith(".uxsch") and file not in exclude_schemas_from_load:
+                uxas_schema_parser.load_schema_from_file(file)
 
     return uxas_schema_parser
 

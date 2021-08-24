@@ -38,6 +38,10 @@ def lmcp_main():
 
     output_dir = parsed_args["o"][0]
 
+    if len(rest_args) == 0:
+        print("No files to process.")
+        return
+
     lib_path_args = []
     if "libpath" in parsed_args:
         if isinstance(parsed_args["libpath"], list):
@@ -48,18 +52,18 @@ def lmcp_main():
     lib_path = lib_path_args + [system_lib_path]
 
     lmcp_parser = LMCPParser(lib_path)
-    cfg = lmcp_parser.load_config_from_file("/extra/midas/openuxas-mde/test/TestSeries.lmcp")
 
-#    print(cfg)
+    for filename in rest_args:
+        cfg = lmcp_parser.load_config_from_file(rest_args[0])
 
-    lmcp_schema_parser = load_lmcp_schemas(lib_path)
-    lmcp_renderer = LMCPXMLRenderer(lmcp_schema_parser.schemas)
+        lmcp_schema_parser = load_lmcp_schemas(lib_path)
+        lmcp_renderer = LMCPXMLRenderer(lmcp_schema_parser.schemas)
 
-    lmcp_xml = lmcp_renderer.render(None, cfg)
+        lmcp_xml = lmcp_renderer.render(None, cfg)
 
 
-    xml_filename = cfg["seriesName"]+".xml"
-    write_elementtree(lmcp_xml, os.path.join(output_dir, xml_filename))
+        xml_filename = cfg["seriesName"]+".xml"
+        write_elementtree(lmcp_xml, os.path.join(output_dir, xml_filename))
 
 if __name__ == '__main__':
     lmcp_main()
