@@ -6,7 +6,7 @@ service DemoService1 {
             afrl.cmasi.AirVehicleState
         ]
         sends: [
-            demo.demoSer.DemoStatus
+            demo.DemoStatus
         ]
     }
     xml {
