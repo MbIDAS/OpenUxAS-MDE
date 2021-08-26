@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!DOCTYPE MDM SYSTEM 'MDM.DTD'>
+<MDM>
+	<SeriesName>demoSer</SeriesName>
+	<Namespace>demo</Namespace>
+	<Version>1</Version>
+	<EnumList>
+		<Enum Name="VehicleCondition">
+			<Entry Name="GOOD" Value="27"/>
+			<Entry Name="BAD" Value="12"/>
+		</Enum>
+	</EnumList>
+	<StructList>
+		<Struct Name="DemoPosition" Extends="CMASI/Location3D">
+			<Field Name="Latitude" Type="real64" Default="0" Units="Degree"/>
+			<Field Name="Longitude" Type="real64" Default="0" Units="Degree"/>
+			<Field Name="Zone" Type="char[]" MaxArrayLength="10" Default="a"/>
+		</Struct>
+		<Struct Name="DemoStatus">
+			<Field Name="VehicleID" Type="int32" Default="0"/>
+			<Field Name="Condition" Type="VehicleCondition"/>
+			<Field Name="Location" Type="DemoPosition"/>
+		</Struct>
+	</StructList>
+</MDM>
