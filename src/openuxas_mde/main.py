@@ -30,10 +30,11 @@ def load_uxas_schemas(lib_path):
     uxas_schema_parser.load_schema_from_file("standard_plans_schema.uxsch")
 
     for lib_part in lib_path:
-        files = os.listdir(lib_part)
-        for file in files:
-            if file.endswith(".uxsch") and file not in exclude_schemas_from_load:
-                uxas_schema_parser.load_schema_from_file(file)
+        if os.path.exists(lib_part):
+            files = os.listdir(lib_part)
+            for file in files:
+                if file.endswith(".uxsch") and file not in exclude_schemas_from_load:
+                    uxas_schema_parser.load_schema_from_file(file)
 
     return uxas_schema_parser
 
