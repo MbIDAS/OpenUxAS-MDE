@@ -14,6 +14,13 @@ use sudo:
 ```shell
 sudo python setup.py install
 ```
+
+On some Ubuntu distributions, you may also need to run the following command if
+it is unable to locate the openuxas-mde distribution:
+```shell
+sudo python setup.py develop
+```
+
 ### Generating a UxAS Configuration
 This project provides a domain-specific languages for defining OpenUxAS configurations, specifying messages, and defining new services.
 
