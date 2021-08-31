@@ -76,8 +76,8 @@ def servicegen_main():
     default_output_dir = os.curdir
     if os.environ.get("UXAS_CPP_DIR") is not None:
         default_output_dir = os.path.join(os.environ.get("UXAS_CPP_DIR"), "Services")
-    elif os.path.exists(os.path.join(os.path.expanduser("~"), "OpenUxAS", "examples")):
-        default_output_dir = os.path.join(os.path.expanduser("~"), "OpenUxAS", "examples")
+    elif os.path.exists(os.path.join(os.path.expanduser("~"), "OpenUxAS", "src", "cpp", "Services")):
+        default_output_dir = os.path.join(os.path.expanduser("~"), "OpenUxAS", "src", "cpp", "Services")
 
     arg_parser = argparse.ArgumentParser(description="Generate UxAS Configuration")
     arg_parser.add_argument('-libpath', nargs=1, default=[""])
