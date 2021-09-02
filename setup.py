@@ -177,8 +177,8 @@ setup(
     entry_points={  # Optional
         'console_scripts': [
             'openuxas-mde-gen=openuxas_mde:main',
-            'openuxas-mde-gen-lmcp=openuxas_mde:lmcp_main',
-            'openuxas-mde-gen-service=openuxas_mde:servicegen_main',
+            'openuxas-mde-gen-lmcp=openuxas_mde.lmcp_main:lmcp_main',
+            'openuxas-mde-gen-service=openuxas_mde.lmcp_main:servicegen_main',
         ],
     },
 
