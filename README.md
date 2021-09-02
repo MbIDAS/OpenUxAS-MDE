@@ -12,13 +12,25 @@ To install OpenUxAS-MDE, clone this repository and just run the setup.py file in
 Since by default it installs to /usr/local on Linux, you'll likely need to
 use sudo:
 ```shell
-sudo python setup.py install
+sudo pip install .
 ```
 
-On some Ubuntu distributions, you may also need to run the following command if
-it is unable to locate the openuxas-mde distribution:
-```shell
-sudo python setup.py develop
+If you don't want to install OpenUxAS-MDE but still want to run it, you
+can run the various utilities manually like this:
+```
+PYTHONPATH=".:src:$PYTHONPATH" python3 src/openuxas_mde/{mainfile} args
+```
+The `{mainfile}` in the above command line should be `main.py` for the
+`openuxas-mde-gen` utility that generates an OpenUxAS app configuration, or
+`lmcp_main.py` for the `openuxas-mde-gen-lmcp` utility that generates LMCP
+xml files, or `servicegen_main.py` for the `openuxas-mde-gen-service` utility
+that generates skeleton .cpp and .h files for service implementation.
+
+If you don't install OpenUxAS-MDE, you will likely need to install two packages
+that it depends on, however:
+```
+sudo pip install textx
+sudo pip install Jinja2
 ```
 
 ### Generating a UxAS Configuration
