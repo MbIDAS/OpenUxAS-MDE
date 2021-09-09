@@ -1,0 +1,172 @@
+// ===============================================================================
+// Authors: AFRL/RQQA
+// Organization: Air Force Research Laboratory, Aerospace Systems Directorate, Power and Control Division
+// 
+// Copyright (c) 2017 Government of the United State of America, as represented by
+// the Secretary of the Air Force.  No copyright is claimed in the United States under
+// Title 17, U.S. Code.  All Other Rights Reserved.
+// ===============================================================================
+
+/* 
+ * File:   {{serviceName}}.cpp
+ *
+ * Created on {{creationDate}}
+ *
+ * <Service Type="{{serviceName}}" {% for configParam in configParams %} {{configParam.name}}="{{configParam.sample}}" {% endfor %} />
+ *
+ */
+
+// include header for this service
+#include "{{serviceName}}.h"
+
+//include for KeyValuePair LMCP Message
+#include "afrl/cmasi/KeyValuePair.h"
+
+#include <iostream>     // std::cout, cerr, etc
+
+ {% for configParam in configParams %}#define STRING_XML_{{configParam.paramNameAllCaps}} "{{configParam.paramName}}"
+ {% endfor %}
+
+// namespace definitions
+namespace uxas  // uxas::
+{
+namespace service   // uxas::service::
+{
+
+///BEGIN_PRESERVE_CPP_DECLS
+{{preserved["CPP_DECLS"]}}
+///END_PRESERVE_CPP_DECLS
+// this entry registers the service in the service creation registry
+{{serviceName}}::ServiceBase::CreationRegistrar<{{serviceName}}>
+{{serviceName}}::s_registrar({{serviceName}}::s_registryServiceTypeNames());
+
+{% if generate["CONSTRUCTOR"] %}
+// service constructor
+{{serviceName}}::{{serviceName}}()
+: ServiceBase({{serviceName}}::s_typeName(), {{serviceName}}::s_directoryName()) {
+///BEGIN_PRESERVE_CONSTRUCTOR
+{{preserved["CONSTRUCTOR"]}}
+///END_PRESERVE_CONSTRUCTOR
+};
+{% else %}
+///OVERRIDE_CONSTRUCTOR
+{% endif %}
+
+{% if generate["DESTRUCTOR"] %}
+// service destructor
+{{serviceName}}::~{{serviceName}}() {
+///BEGIN_PRESERVE_DESTRUCTOR
+{{preserved["DESTRUCTOR"]}}
+///END_PRESERVE_DESTRUCTOR
+};
+{% else %}
+///OVERRIDE_DESTRUCTOR
+{% endif %}
+
+{% if generate["CONFIGURE"] %}
+bool {{serviceName}}::configure(const pugi::xml_node& ndComponent)
+{
+    bool isSuccess(true);
+
+    // process options from the XML configuration node:
+ {% for configParam in configParams %}
+    if (!ndComponent.attribute(STRING_XML_{{configParam.paramNameAllCaps}}).empty())
+    {
+        m_{{configParam.paramName}} = ndComponent.attribute(STRING_XML_{{configParam.paramNameAllCaps}}).{{configParam.paramValueExtractor}}();
+    }
+ {% endfor %}
+    // subscribe to messages::
+ {% for receive in receives %}    addSubscriptionAddress({{receive.message}}::Subscription);
+ {% endfor %}
+///BEGIN_PRESERVE_CONFIGURE
+{{preserved["CONFIGURE"]}}
+///END_PRESERVE_CONFIGURE
+    return (isSuccess);
+}
+{% else %}
+///OVERRIDE_CONFIGURE
+{% endif %}
+
+{% if generate["INITIALIZE"] %}
+bool {{serviceName}}::initialize()
+{
+    // perform any required initialization before the service is started
+    std::cout << "*** INITIALIZING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+
+///BEGIN_PRESERVE_INITIALIZE
+{{preserved["INITIALIZE"]}}
+///END_PRESERVE_INITIALIZE
+    return (true);
+}
+{% else %}
+///OVERRIDE_INITIALIZE
+{% endif %}
+
+{% if generate["START"] %}
+bool {{serviceName}}::start()
+{
+    // perform any actions required at the time the service starts
+    std::cout << "*** STARTING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+    
+///BEGIN_PRESERVE_START
+{{preserved["START"]}}
+///END_PRESERVE_START
+    return (true);
+};
+{% else %}
+///OVERRIDE_START
+{% endif %}
+
+{% if generate["TERMINATE"] %}
+bool {{serviceName}}::terminate()
+{
+    // perform any action required during service termination, before destructor is called.
+    std::cout << "*** TERMINATING:: Service[" << s_typeName() << "] Service Id[" << m_serviceId << "] with working directory [" << m_workDirectoryName << "] *** " << std::endl;
+    
+///BEGIN_PRESERVE_TERMINATE
+{{preserved["TERMINATE"]}}
+///END_PRESERVE_TERMINATE
+    return (true);
+}
+{% else %}
+///OVERRIDE_TERMINATE
+{% endif %}
+
+{% if generate["RECEIVE"] %}
+bool {{serviceName}}::processReceivedLmcpMessage(std::unique_ptr<uxas::communications::data::LmcpMessage> receivedLmcpMessage)
+{
+ {% for receive in receives %}   if ({{receive.test}}(receivedLmcpMessage->m_object))
+    {
+        std::shared_ptr<{{receive.message}}> {{receive.prefix}}In = std::static_pointer_cast<{{receive.message}}> (receivedLmcpMessage->m_object);
+        std::cout << "*** RECEIVED:: Service[" << s_typeName() << "] Received a {{receive.name}} *** " << std::endl;
+
+        handle{{receive.name}}({{receive.prefix}}In);
+    }
+ {% endfor %}
+///BEGIN_PRESERVE_RECEIVE
+{{preserved["RECEIVE"]}}
+///END_PRESERVE_RECEIVE
+    return false;
+}
+{% else %}
+///OVERRIDE_RECEIVE
+{% endif %}
+
+{% for receive in receives %}{% if generate["RECEIVE_"+receive.name] %}void {{serviceName}}::handle{{receive.name}}(std::shared_ptr<{{receive.message}}> message)
+{
+    // add message handler here
+///BEGIN_PRESERVE_RECEIVE_{{receive.name}}
+{{preserved["RECEIVE_"+receive.name]}}
+///END_PRESERVE_RECEIVE_{{receive.name}}
+}
+{% else %}
+///OVERRIDE_RECEIVE_{{receive.name}}
+{% endif %}
+{% endfor %}
+
+///BEGIN_PRESERVE_ADDITIONAL
+{{preserved["ADDITIONAL"]}}
+///END_PRESERVE_ADDITIONAL
+
+}; //namespace service
+}; //namespace uxas

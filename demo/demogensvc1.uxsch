@@ -1,0 +1,16 @@
+service DemoService1 {
+    params {
+    }
+    messages {
+        receives : [
+            afrl.cmasi.AirVehicleState
+        ]
+        sends: [
+            demo.DemoStatus
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "DemoService1"
+    }
+}

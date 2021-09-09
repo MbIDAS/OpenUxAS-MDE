@@ -1,0 +1,15 @@
+service DemoService2 {
+    params {
+    }
+    messages {
+        receives : [
+            demo.DemoStatus
+        ]
+        sends: [
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "DemoService2"
+    }
+}

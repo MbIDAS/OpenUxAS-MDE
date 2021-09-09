@@ -25,6 +25,9 @@ class TypeChecker:
         self.check_types_against_schema(obj, schema)
 
     def check_types_against_schema(self, obj, schema):
+        if "params" not in schema:
+            print("Error: schema contains no ""params""")
+            return
         for param in schema["params"]:
             if param["param_name"] in obj:
                 val = obj[param["param_name"]]

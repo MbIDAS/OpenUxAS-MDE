@@ -48,7 +48,7 @@ setup(
     #
     # This field corresponds to the "Description" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#description-optional
-    long_description=long_description,  # Optional
+    long_description='A DSL for configuring OpenUxAS',  # Optional
 
     # Denotes that our long_description is in Markdown; valid values are
     # text/plain, text/x-rst, and text/markdown
@@ -139,7 +139,7 @@ setup(
     #
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['textx'],  # Optional
+    install_requires=['textx', 'Jinja2'],  # Optional
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
@@ -157,7 +157,7 @@ setup(
     # If there are data files included in your packages that need to be
     # installed, specify them here.
     package_data={  # Optional
-        "openuxas_mde": ["lang/*.tx", "lib/*"]
+        "openuxas_mde": ["lang/*.tx", "lib/*", "templates/*"]
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -177,6 +177,8 @@ setup(
     entry_points={  # Optional
         'console_scripts': [
             'openuxas-mde-gen=openuxas_mde:main',
+            'openuxas-mde-gen-lmcp=openuxas_mde.lmcp_main:lmcp_main',
+            'openuxas-mde-gen-service=openuxas_mde.servicegen_main:servicegen_main',
         ],
     },
 

@@ -1,0 +1,54 @@
+mdm {
+    xml {
+        tag: "MDM"
+        child "SeriesName": seriesName
+        child "Namespace": namespace
+        child "Version": version
+        children enums tag EnumList {
+            render: _
+        }
+        children structs tag StructList {
+            render: _
+        }
+    }
+}
+
+Enum {
+    xml {
+        tag: "Enum"
+        attr Name: name
+        children values {
+            render: _
+        }
+    }
+}
+
+Entry {
+    xml {
+        tag: "Entry"
+        attr Name: name
+        attr Value: value
+    }
+}
+
+Struct {
+    xml {
+        tag: "Struct"
+        attr Name: name
+        attr Extends: extends
+        children fields {
+            render: _
+        }
+    }
+}
+
+Field {
+    xml {
+        tag: "Field"
+        attr Name: name
+        attr Type: type
+        attr MaxArrayLength: size
+        attr Default: default
+        attr Units: units
+    }
+}

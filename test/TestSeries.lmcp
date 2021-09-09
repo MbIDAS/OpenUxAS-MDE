@@ -1,0 +1,25 @@
+SeriesName: TestSer
+Namespace: Example
+Version: 1
+
+Enums: [
+    enum VehicleCondition {
+        GOOD=27,
+        BAD=12
+    }
+]
+
+Structs: [
+    struct Position extends CMASI/Location3D {
+        Latitude: real64 default=0 units=Degree
+        Longitude: real64 default=0 units=Degree
+        Zone: char[10] default="a"
+    }
+
+    struct Status {
+        VehicleID: int32 default=0
+        Condition: VehicleCondition
+        Location: CMASI/Location3D
+        Extra: LmcpObject
+    }
+]

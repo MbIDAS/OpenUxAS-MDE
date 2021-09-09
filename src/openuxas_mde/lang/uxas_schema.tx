@@ -22,7 +22,7 @@ ParamsDef:
     ;
 
 ParamDef:
-    paramName=ID "{" paramAttrs *= ParamDefAttr "}"
+    paramName=ID paramDesc=STRING? "{" paramAttrs *= ParamDefAttr "}"
     ;
 
 ParamDefAttr:

@@ -12,8 +12,27 @@ To install OpenUxAS-MDE, clone this repository and just run the setup.py file in
 Since by default it installs to /usr/local on Linux, you'll likely need to
 use sudo:
 ```shell
-sudo python setup.py install
+sudo pip install .
 ```
+
+If you don't want to install OpenUxAS-MDE but still want to run it, you
+can run the various utilities manually like this:
+```
+PYTHONPATH=".:src:$PYTHONPATH" python3 src/openuxas_mde/{mainfile} args
+```
+The `{mainfile}` in the above command line should be `main.py` for the
+`openuxas-mde-gen` utility that generates an OpenUxAS app configuration, or
+`lmcp_main.py` for the `openuxas-mde-gen-lmcp` utility that generates LMCP
+xml files, or `servicegen_main.py` for the `openuxas-mde-gen-service` utility
+that generates skeleton .cpp and .h files for service implementation.
+
+If you don't install OpenUxAS-MDE, you will likely need to install two packages
+that it depends on, however:
+```
+sudo pip install textx
+sudo pip install Jinja2
+```
+
 ### Generating a UxAS Configuration
 This project provides a domain-specific languages for defining OpenUxAS configurations, specifying messages, and defining new services.
 
@@ -586,6 +605,125 @@ replaced with the mechanism for doing the repetition from the .uxas
 file instead. This will give you better control in case you don't want
 to generate a `WaypointPlanManagerService` for every vehicle, or if you want
 to generate different configurations for different vehicles.
+
+## Generating an LMCP Definition
+OpenUxAS-MDE has an alternative syntax for generating LMCP definition files.
+In this case, your .lmcp file is converted into an .xml file that can be
+run through the LMCPGen process.
+
+Here is an example file using the OpenUxAS-MDE syntax:
+```
+SeriesName: demoSer
+Namespace: demo
+Version: 1
+
+Enums: [
+    enum VehicleCondition {
+        GOOD=27,
+        BAD=12
+    }
+]
+
+Structs: [
+    struct DemoPosition extends CMASI/Location3D {
+        Latitude: real64 default=0 units=Degree
+        Longitude: real64 default=0 units=Degree
+        Zone: char[10] default="a"
+    }
+
+    struct DemoStatus {
+        VehicleID: int32 default=0
+        Condition: VehicleCondition
+        Location: DemoPosition
+    }
+]
+```
+
+Here is the equivalent LMCP .xml file:
+```xml
+<?xml version="1.0" ?>
+<!DOCTYPE MDM SYSTEM 'MDM.DTD'>
+<MDM>
+	<SeriesName>demoSer</SeriesName>
+	<Namespace>demo</Namespace>
+	<Version>1</Version>
+	<EnumList>
+		<Enum Name="VehicleCondition">
+			<Entry Name="GOOD" Value="27"/>
+			<Entry Name="BAD" Value="12"/>
+		</Enum>
+	</EnumList>
+	<StructList>
+		<Struct Name="DemoPosition" Extends="CMASI/Location3D">
+			<Field Name="Latitude" Type="real64" Default="0" Units="Degree"/>
+			<Field Name="Longitude" Type="real64" Default="0" Units="Degree"/>
+			<Field Name="Zone" Type="char[]" MaxArrayLength="10" Default="a"/>
+		</Struct>
+		<Struct Name="DemoStatus">
+			<Field Name="VehicleID" Type="int32" Default="0"/>
+			<Field Name="Condition" Type="VehicleCondition"/>
+			<Field Name="Location" Type="DemoPosition"/>
+		</Struct>
+	</StructList>
+</MDM>
+```
+
+The two formats mostly have a one-to-one correspondence, so that structs and enums
+are specified with the similar names, except that attribute names in the OpenUxAS-MDE
+format tend to be in lower-case.
+
+To run the generator, simply run `openuxas-mde-gen-lmcp` with the name of the .lmcp file
+you wish to generate from:
+```
+openuxas-mde-gen-lmcp demo_series.lmcp
+```
+It will place the generated .xml file in the current directory, or in the directory
+specified with the -o option.
+
+## Generating a Service Template
+OpenUxAS-MDE can generate template .cpp and .h files for a service that you
+can fill in. It includes comments defining protected areas that the generator
+will preserve if you re-run it on existing files.
+
+When you generate the files, the generator will look for the environment variable
+`UXAS_CPP_DIR` and generate the files in the Service directory under the directory
+named by the environment variable. Or, if there is a directory named OpenUxAS under
+the user's home directory and it contains a directory path of `src/cpp/Services` it
+will write the files there. Otherwise, you can specify an alternate directory with
+`-o` or it will write to the current directory.
+
+The service template generator works with .uxsch files in the same format
+as used above for generating applications. If you specify that a service
+receives particular messages, it will create a callback method for each
+message type in the generated template file and generate code in the message
+handler to call the appropriate callback method.
+
+Here is an example service definition:
+```
+service DemoService1 {
+    params {
+    }
+    messages {
+        receives : [
+            afrl.cmasi.AirVehicleState
+        ]
+        sends: [
+            demo.DemoStatus
+        ]
+    }
+    xml {
+        tag: "Service"
+        attr Type: "DemoService1"
+    }
+}
+```
+
+To run the generator, run `openuxas-mde-gen-service` on the desired .uxsch
+file. For example:
+```shell
+openuxas-mde-gen-service demogensvc1.uxsch
+```
+
 
 ## Building a Setup File
 To create a 'wheel' file that can be installed with pip, from the root directory
